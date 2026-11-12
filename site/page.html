@@ -1,4 +1,4 @@
-<title>The Living World</title>
+<title>{{TITLE}}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
@@ -106,6 +106,14 @@ button { font: inherit; cursor: pointer; }
 .opts button .l { font-family: var(--f-mono); color: var(--muted); }
 .opts button.ok { border-color: var(--good); background: var(--good-bg); }
 .opts button.no { border-color: var(--bad); background: var(--bad-bg); }
+.anim-ctl { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+.anim-ctl .muted { font-size: 14px; }
+.drill-pick { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.nc-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: 8px 10px; align-items: center; margin-top: 12px; }
+.nc-grid .h { font-family: var(--f-mono); font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.nc-grid select { font: inherit; padding: 6px 8px; border-radius: 8px; border: 1.5px solid var(--line); background: var(--bg); color: var(--fg); min-width: 0; width: 100%; }
+.nc-grid select.ok { border-color: var(--good); background: var(--good-bg); }
+.nc-grid select.no { border-color: var(--bad); background: var(--bad-bg); }
 .why { margin-top: 14px; border-left: 4px solid var(--accent); padding: 4px 0 4px 14px; }
 .q-nav { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
 .score-big { font-family: var(--f-display); font-size: 64px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
@@ -116,13 +124,13 @@ footer { border-top: 1px solid var(--line); padding-block: 18px 32px; font-size:
 
 <header class="wrap top">
   <div>
-    <div class="eyebrow">NCERT Biology XI · Unit 1 · NEET revision</div>
-    <h1>The Living World</h1>
+    <div class="eyebrow">{{EYEBROW}}</div>
+    <h1>{{TITLE}}</h1>
   </div>
-  <p class="lede">Chapter 1, complete: 8 explainer videos, swipeable slides for every topic, a glossary, a hierarchy lab and 20 practice MCQs. Content marked <span class="badge-extra">NEET tip</span> goes beyond the NCERT text.</p>
+  <p class="lede">{{LEDE}} Content marked <span class="badge-extra">NEET tip</span> goes beyond the NCERT text.</p>
 </header>
 <nav class="tabs" aria-label="Sections"><div class="wrap">
-  <a href="#learn">Learn</a><a href="#glossary">Glossary</a><a href="#lab">Hierarchy lab</a><a href="#quiz">Quiz</a>
+  <a href="#learn">Learn</a><a href="#glossary">Glossary</a><a href="#lab">{{LABNAME}}</a><a href="#quiz">Quiz</a>
 </div></nav>
 <main class="wrap">
   <section id="v-learn" hidden>
@@ -143,6 +151,7 @@ footer { border-top: 1px solid var(--line); padding-block: 18px 32px; font-size:
           <span class="count" id="count"></span>
           <button class="btn primary" id="next" aria-label="Next slide">Next →</button>
         </div>
+        <div class="anim-ctl" id="anim-ctl" hidden><button class="btn" id="anim-play">▶ Play animation</button><span class="muted" id="anim-stage"></span></div>
         <div class="dots" id="dots"></div>
       </div>
     </div>
@@ -159,7 +168,7 @@ footer { border-top: 1px solid var(--line); padding-block: 18px 32px; font-size:
   </section>
 
   <section id="v-lab" hidden>
-    <h2>Hierarchy lab</h2>
+    <h2>{{LABNAME}}</h2>
     <p class="muted" style="margin:0 0 18px">Two drills straight from Figure 1.1 and Table 1.1.</p>
     <div class="lab">
       <div class="box">
@@ -183,10 +192,10 @@ footer { border-top: 1px solid var(--line); padding-block: 18px 32px; font-size:
 
   <section id="v-quiz" hidden>
     <h2>NEET practice quiz</h2>
-    <p class="muted" style="margin:0 0 18px">20 MCQs built from Chapter 1. Your best score is remembered on this device.</p>
+    <p class="muted" style="margin:0 0 18px">{{NMCQ}} MCQs built from {{CHAPNAME}}. Your best score is remembered on this device.</p>
     <div class="quiz box" id="quiz"></div>
   </section>
 </main>
-<footer class="wrap muted">Source: NCERT Biology Class XI, Chapter 1 “The Living World” (kebo101.pdf). Model answers, tips and MCQs are study aids written from that text.</footer>
+<footer class="wrap muted">Source: NCERT Biology Class XI, {{CHAPNAME}} “{{TITLE}}” ({{PDF}}). Model answers, tips and MCQs are study aids written from that text.</footer>
 
 <script>/*APP_JS*/</script>

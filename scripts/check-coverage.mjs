@@ -1,11 +1,13 @@
-// Fails if any key fact from the NCERT chapter is missing from content/ch01.mjs.
-import data from "../content/ch01.mjs";
+// Fails if any key fact from the NCERT chapter is missing from the content file.
+// Usage: node scripts/check-coverage.mjs [ch01|ch10]  (a chapter may list its own `mustCover`)
 import fs from "node:fs";
+const CH = process.argv[2] || "ch01";
+const data = (await import(`../content/${CH}.mjs`)).default;
 
 // Table 1.1 is drawn by the renderer, so its source counts too.
 const renderer = fs.readFileSync(new URL("../templates/slides.js", import.meta.url), "utf8");
-const text = (JSON.stringify(data) + renderer).replace(/<[^>]+>/g, "").replace(/\\u2013|–/g, "-");
-const MUST = [
+const text = (JSON.stringify({ ...data, mustCover: undefined }) + renderer).replace(/<[^>]+>/g, "").replace(/\\u2013|–/g, "-");
+const MUST = data.mustCover || [
   // unit intro + Mayr
   "science of life forms and living processes", "deified", "wind, sea, fire", "awe or fear", "anthropocentric",
   "horizontally and vertically", "conservation of biodiversity", "5 July 1904", "Kempten", "Darwin of the 20",

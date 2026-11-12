@@ -2,3 +2,7 @@ out/.frames/
 out/render.log
 node_modules/
 download/
+models/
+out/ch10/.voice/
+out/ch10/.frames/
+out/ch10/render.log

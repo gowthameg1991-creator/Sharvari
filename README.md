@@ -1,4 +1,11 @@
-# NEET study pack: NCERT Biology XI, Chapter 1 "The Living World"
+# NEET study packs: NCERT Biology XI
+
+| Chapter | Videos | Carousels | Revision page |
+| --- | --- | --- | --- |
+| 1 · The Living World | `out/videos/` (silent, captioned) | `out/carousels/` | `out/site/index.html` |
+| 10 · Cell Cycle and Cell Division | `out/ch10/videos/` (voice-over + animations) | `out/ch10/carousels/` | `out/ch10/site/index.html` |
+
+## Chapter 1 "The Living World"
 
 Visual revision material made from the NCERT chapter ([kebo101.pdf](https://ncert.nic.in/textbook/pdf/kebo101.pdf)) so you can learn it without reading the textbook page by page.
 
@@ -21,15 +28,25 @@ Visual revision material made from the NCERT chapter ([kebo101.pdf](https://ncer
 
 Slides with a raspberry **NEET tip · Beyond NCERT** label add exam tips that are not in the NCERT text. Everything else follows the textbook.
 
+## Chapter 10 "Cell Cycle and Cell Division"
+
+Ten topics (10.1 to 10.5, summary with all 16 exercises, 20 MCQs). Videos are narrated by the Kokoro neural voice `af_heart` and show animated diagrams drawn in `templates/cellanim.js`: the cell-cycle wheel, the DNA/chromosome graph, every stage of mitosis, animal and plant cytokinesis, and all of meiosis including synapsis, crossing over, chiasmata and terminalisation.
+
 ## Rebuild
 
-Needs Node 22, Playwright with Chromium, and ffmpeg.
+Needs Node 22, Playwright with Chromium, and ffmpeg. Voice-over also needs Python with `pip install kokoro-onnx soundfile` and the model files in `models/`:
 
 ```bash
-node scripts/check-coverage.mjs       # every key NCERT fact is in the content
-node scripts/render.mjs carousels     # PNG slides
-node scripts/render.mjs videos [n]    # MP4s (all, or topic index n)
-node scripts/build-site.mjs           # self-contained revision page
+curl -L -o models/kokoro-v1.0.onnx https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx
+curl -L -o models/voices-v1.0.bin https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin
 ```
 
-All three outputs come from one file, `content/ch01.mjs`. Edit it and re-run to change any slide, caption or question. `templates/slides.js` and `templates/slides.css` draw the slides and diagrams.
+```bash
+node scripts/check-coverage.mjs ch10                      # every key NCERT fact is in the content
+node scripts/render.mjs carousels --chapter ch10          # PNG slides
+node scripts/render.mjs videos [n] --chapter ch10 --voice # narrated, animated MP4s
+node scripts/render.mjs videos [n]                        # Chapter 1 silent videos
+node scripts/build-site.mjs ch10                          # self-contained revision page
+```
+
+Each chapter's outputs come from one file, `content/<chapter>.mjs`. Edit it and re-run to change any slide, caption or question. `templates/slides.js` and `templates/slides.css` draw the slides and diagrams.

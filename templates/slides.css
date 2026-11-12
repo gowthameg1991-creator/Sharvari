@@ -145,6 +145,12 @@
 .dia-chips .chip { background: var(--accent); color: #fff; font-family: var(--f-display); font-weight: 700; padding: 14px 22px; border-radius: 999px; font-size: .9em; }
 .dia-chips .arr { font-family: var(--f-mono); color: var(--ink-2); font-size: 1em; }
 
+.dia-anim { width: 100%; max-width: 820px; }
+.dia-anim svg { width: 100%; height: auto; display: block; }
+.sl.portrait .dia-anim svg { max-height: 400px; }
+.sl.landscape .dia-anim svg { max-height: 640px; }
+.dia-table.nct td, .dia-table.nct th { font-size: 1em; }
+
 /* video caption frame */
 .vframe { width: 1920px; height: 1080px; position: relative; background: #0E1E18; overflow: hidden; }
 .vframe .sl { position: absolute; left: 0; top: 0; }

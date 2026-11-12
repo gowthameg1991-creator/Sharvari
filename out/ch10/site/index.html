@@ -1,0 +1,1231 @@
+<title>Cell Cycle and Cell Division</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: specimen-cabinet. Sticky drawer tabs on top, one working surface below. */
+:root {
+  --bg: #EDF1EA; --surface: #F8FAF6; --line: #C3CFC6; --fg: #12261E; --muted: #4A5E55;
+  --accent: #1C6B58; --accent-fg: #FFFFFF; --tag: #F3CF5A; --extra: #A93366;
+  --good: #1F7A4D; --bad: #B3362F; --good-bg: #DDEFE3; --bad-bg: #F7E0DE;
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0F1B16; --surface: #162620; --line: #2E443A; --fg: #E6EEE8; --muted: #9DB3A8;
+  --accent: #5CC2A3; --accent-fg: #0F1B16; --tag: #F3CF5A; --extra: #E07AA6;
+  --good: #6FD39C; --bad: #F08A80; --good-bg: #173A2A; --bad-bg: #3D1F1D; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0F1B16; --surface: #162620; --line: #2E443A; --fg: #E6EEE8; --muted: #9DB3A8;
+  --accent: #5CC2A3; --accent-fg: #0F1B16; --tag: #F3CF5A; --extra: #E07AA6;
+  --good: #6FD39C; --bad: #F08A80; --good-bg: #173A2A; --bad-bg: #3D1F1D; color-scheme: dark; }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 17px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header.top { padding-block: 28px 8px; display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: end; justify-content: space-between; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(34px, 6vw, 56px); line-height: 1; letter-spacing: -.02em; margin: 6px 0 0; text-wrap: balance; }
+.lede { color: var(--muted); max-width: 60ch; margin: 0; }
+nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+nav.tabs .wrap { display: flex; gap: 4px; overflow-x: auto; }
+nav.tabs a { font-family: var(--f-display); font-weight: 700; font-size: 16px; color: var(--muted); text-decoration: none; padding: 14px 14px 12px; border-bottom: 3px solid transparent; white-space: nowrap; }
+nav.tabs a[aria-current="page"] { color: var(--fg); border-bottom-color: var(--accent); }
+nav.tabs a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, video:focus-visible { outline: 3px solid var(--tag); outline-offset: 2px; }
+main { padding-block: 24px 64px; }
+h2 { font-family: var(--f-display); font-size: 26px; margin: 0 0 4px; text-wrap: balance; }
+.muted { color: var(--muted); }
+button { font: inherit; cursor: pointer; }
+.btn { border: 1.5px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 8px; padding: 8px 14px; font-weight: 700; }
+.btn.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.btn:disabled { opacity: .45; cursor: default; }
+
+/* Learn */
+.topics { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 22px; }
+.topics button { border: 1.5px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 999px; padding: 6px 14px; font-size: 14px; }
+.topics button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.topics button .n { font-family: var(--f-mono); font-size: 12px; opacity: .7; margin-right: 6px; }
+.learn-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 860px) { .learn-grid { grid-template-columns: minmax(0, 1fr); } }
+.panel-label { font-family: var(--f-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: flex; justify-content: space-between; gap: 12px; }
+.video-box { background: #0E1E18; border-radius: 10px; overflow: hidden; aspect-ratio: 16 / 9; max-width: 100%; }
+.video-box video { width: 100%; height: 100%; display: block; }
+.video-missing { color: #CFE0D7; display: grid; place-items: center; height: 100%; padding: 20px; text-align: center; font-size: 15px; }
+.viewer { position: relative; max-width: 100%; }
+.slide-frame { position: relative; width: 100%; aspect-ratio: 1080 / 1350; overflow: hidden; border-radius: 10px; border: 1px solid var(--line); background: #EDF1EA; touch-action: pan-y; }
+.slide-frame > .sl { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.viewer-ctl { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.viewer-ctl .count { font-family: var(--f-mono); font-size: 13px; color: var(--muted); flex: 1; text-align: center; font-variant-numeric: tabular-nums; }
+.dots { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: 8px; }
+.dots button { width: 9px; height: 9px; border-radius: 50%; border: 0; padding: 0; background: var(--line); }
+.dots button[aria-current="true"] { background: var(--accent); }
+.notes { margin-top: 22px; }
+.notes ul { padding-left: 20px; margin: 6px 0 0; display: grid; gap: 6px; }
+.notes b { color: var(--accent); }
+.notes a { color: var(--fg); text-decoration-color: var(--line); text-underline-offset: 3px; }
+.notes a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+.badge-extra { display: inline-block; font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; background: var(--extra); color: #fff; padding: 2px 8px; border-radius: 4px; vertical-align: middle; }
+
+/* Glossary */
+.gl-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 12px 0 18px; }
+.gl-tools input { font: inherit; padding: 9px 12px; border-radius: 8px; border: 1.5px solid var(--line); background: var(--surface); color: var(--fg); min-width: 0; flex: 1 1 220px; max-width: 360px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+.card { border: 1.5px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 10px; padding: 16px; min-height: 116px; text-align: left; display: flex; flex-direction: column; gap: 6px; }
+.card .term { font-family: var(--f-display); font-weight: 700; font-size: 19px; }
+.card .def { color: var(--fg); }
+.card .hint { font-family: var(--f-mono); font-size: 11px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin-top: auto; }
+.card[aria-pressed="false"] .def { display: none; }
+.card[aria-pressed="true"] { border-color: var(--accent); }
+
+/* Hierarchy lab */
+.lab { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; }
+@media (max-width: 860px) { .lab { grid-template-columns: minmax(0, 1fr); } }
+.box { border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; padding: 18px; }
+.pool, .built { display: flex; flex-wrap: wrap; gap: 8px; min-height: 48px; margin-top: 10px; }
+.pool button { border: 1.5px dashed var(--accent); background: transparent; color: var(--fg); border-radius: 8px; padding: 8px 12px; font-weight: 700; }
+.built span { background: var(--accent); color: var(--accent-fg); border-radius: 8px; padding: 8px 12px; font-weight: 700; }
+.built span.wrong { background: var(--bad); color: #fff; }
+.status { margin-top: 12px; min-height: 1.5em; font-weight: 700; }
+.status.ok { color: var(--good); } .status.no { color: var(--bad); }
+.tbl-fill { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 12px; align-items: center; margin-top: 12px; }
+.tbl-fill label { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.tbl-fill select { font: inherit; padding: 7px 10px; border-radius: 8px; border: 1.5px solid var(--line); background: var(--bg); color: var(--fg); min-width: 0; width: 100%; }
+.tbl-fill select.ok { border-color: var(--good); background: var(--good-bg); }
+.tbl-fill select.no { border-color: var(--bad); background: var(--bad-bg); }
+.seg { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.seg button { border: 1.5px solid var(--line); background: var(--bg); color: var(--fg); border-radius: 999px; padding: 5px 12px; }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+/* Quiz */
+.quiz { max-width: 720px; }
+.q-head { display: flex; justify-content: space-between; gap: 12px; font-family: var(--f-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.q-bar { height: 6px; background: var(--line); border-radius: 3px; margin: 8px 0 18px; overflow: hidden; }
+.q-bar > div { height: 100%; background: var(--accent); }
+.q-text { font-family: var(--f-display); font-size: 23px; font-weight: 700; line-height: 1.25; margin: 0 0 14px; text-wrap: balance; }
+.opts { display: grid; gap: 10px; }
+.opts button { text-align: left; border: 1.5px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 10px; padding: 12px 14px; display: flex; gap: 12px; }
+.opts button .l { font-family: var(--f-mono); color: var(--muted); }
+.opts button.ok { border-color: var(--good); background: var(--good-bg); }
+.opts button.no { border-color: var(--bad); background: var(--bad-bg); }
+.anim-ctl { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+.anim-ctl .muted { font-size: 14px; }
+.drill-pick { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.nc-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: 8px 10px; align-items: center; margin-top: 12px; }
+.nc-grid .h { font-family: var(--f-mono); font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.nc-grid select { font: inherit; padding: 6px 8px; border-radius: 8px; border: 1.5px solid var(--line); background: var(--bg); color: var(--fg); min-width: 0; width: 100%; }
+.nc-grid select.ok { border-color: var(--good); background: var(--good-bg); }
+.nc-grid select.no { border-color: var(--bad); background: var(--bad-bg); }
+.why { margin-top: 14px; border-left: 4px solid var(--accent); padding: 4px 0 4px 14px; }
+.q-nav { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+.score-big { font-family: var(--f-display); font-size: 64px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+footer { border-top: 1px solid var(--line); padding-block: 18px 32px; font-size: 14px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+</style>
+<style>/* Specimen-sheet look: pale sage paper, forest ink, teal accent,
+   label-yellow tags, raspberry for NEET extras. Fixed light: slides are images. */
+.sl {
+  --paper: #EDF1EA;
+  --paper-2: #E1E8DD;
+  --ink: #12261E;
+  --ink-2: #3D5249;
+  --line: #B9C7BC;
+  --accent: #1C6B58;
+  --accent-2: #D7E9E1;
+  --tag: #F3CF5A;
+  --extra: #A93366;
+  --extra-2: #F6E3EB;
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --fs: 34px;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: var(--fs);
+  line-height: 1.32;
+  display: flex;
+  flex-direction: column;
+}
+.sl *, .sl *::before, .sl *::after { box-sizing: border-box; }
+.sl.portrait { width: 1080px; height: 1350px; padding: 64px 72px 56px; }
+.sl.landscape { width: 1920px; height: 900px; padding: 56px 88px 40px; }
+.sl.is-extra { --accent: var(--extra); --accent-2: var(--extra-2); background: linear-gradient(var(--paper), var(--paper)) padding-box; box-shadow: inset 14px 0 0 var(--extra); }
+
+/* grid-paper texture, very faint */
+.sl::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(var(--paper-2) 1px, transparent 1px), linear-gradient(90deg, var(--paper-2) 1px, transparent 1px);
+  background-size: 54px 54px; opacity: .55;
+}
+.sl > * { position: relative; }
+
+.sl-top { display: flex; justify-content: space-between; align-items: center; gap: 24px; font-family: var(--f-mono); font-size: 22px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+.sl-tag { background: var(--tag); color: var(--ink); padding: 6px 14px; border-radius: 4px; font-weight: 500; }
+.sl.is-extra .sl-tag { background: var(--extra); color: #fff; }
+.sl-title { font-family: var(--f-display); font-weight: 800; font-size: min(2em, 78px); line-height: 1.04; letter-spacing: -0.02em; margin: 26px 0 0; text-wrap: balance; }
+.sl-body { flex: 1; min-height: 0; margin-top: 30px; display: flex; flex-direction: column; gap: 30px; }
+.sl.landscape .sl-body.has-diagram { flex-direction: row; align-items: flex-start; }
+.sl.landscape .sl-body.has-diagram > .sl-points { flex: 1 1 52%; min-width: 0; }
+.sl.landscape .sl-body.has-diagram > .sl-dia { flex: 1 1 48%; min-width: 0; order: 2; }
+.sl.landscape .sl-body.has-diagram.no-points > .sl-dia { flex-basis: 100%; }
+.sl-foot { display: flex; justify-content: space-between; font-family: var(--f-mono); font-size: 19px; color: var(--ink-2); margin-top: 18px; letter-spacing: .04em; }
+
+.sl-points { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .62em; }
+.sl-points li { position: relative; padding-left: 1.15em; }
+.sl-points li::before { content: ""; position: absolute; left: 0; top: .48em; width: .42em; height: .42em; border-radius: 50%; background: var(--accent); }
+.sl-points.numbered { counter-reset: n; }
+.sl-points.numbered li { padding-left: 1.7em; counter-increment: n; }
+.sl-points.numbered li::before { content: counter(n); width: 1.25em; height: 1.25em; top: .02em; display: grid; place-items: center; color: #fff; font-family: var(--f-mono); font-size: .8em; border-radius: 6px; }
+.sl b { color: var(--accent); font-weight: 700; }
+.sl i { font-style: italic; }
+.sl .step-hidden { visibility: hidden; }
+.sl .step-current { background: linear-gradient(transparent 62%, rgba(243,207,90,.55) 62%); }
+
+/* cover */
+.sl.kind-cover { justify-content: space-between; background: var(--ink); color: var(--paper); }
+.sl.kind-cover::before { opacity: .06; }
+.sl.kind-cover .sl-top { color: #A9C2B6; }
+.sl.kind-cover .cv-main { display: flex; flex-direction: column; gap: 34px; }
+.sl.kind-cover .cv-title { font-family: var(--f-display); font-weight: 800; font-size: min(3.2em, 136px); line-height: .98; letter-spacing: -0.03em; margin: 0; text-wrap: balance; }
+.sl.landscape.kind-cover .cv-title { font-size: min(3.4em, 140px); max-width: 15em; }
+.sl.kind-cover .cv-sub { font-size: 1.05em; color: #CFE0D7; max-width: 30em; margin: 0; }
+.sl.kind-cover .cv-eyebrow { font-family: var(--f-mono); font-size: 26px; color: var(--tag); letter-spacing: .08em; text-transform: uppercase; }
+.sl.kind-cover .sl-foot { color: #A9C2B6; }
+.cv-specimen { display: inline-flex; gap: 18px; align-items: center; border: 2px solid #3E5C50; padding: 14px 20px; border-radius: 8px; font-family: var(--f-mono); font-size: 22px; color: #CFE0D7; width: max-content; }
+.cv-specimen i { font-family: var(--f-body); font-size: 28px; color: #fff; }
+
+/* qa */
+.qa-q { font-family: var(--f-display); font-weight: 700; font-size: min(1.32em, 60px); line-height: 1.15; margin: 0; text-wrap: balance; }
+.qa-label { font-family: var(--f-mono); font-size: .6em; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: -14px; }
+
+/* mcq */
+.mcq-opts { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+.mcq-opts li { display: flex; gap: 18px; align-items: baseline; border: 2px solid var(--line); background: #F7F9F5; border-radius: 10px; padding: 16px 22px; }
+.mcq-opts li span { font-family: var(--f-mono); font-weight: 500; color: var(--ink-2); }
+.mcq-opts li.correct { border-color: var(--accent); background: var(--accent-2); }
+.mcq-opts li.correct span { color: var(--accent); }
+.mcq-why { border-left: 6px solid var(--accent); padding: 8px 0 8px 22px; color: var(--ink-2); }
+.mcq-why.step-hidden { visibility: hidden; }
+
+/* diagrams */
+.sl-dia { display: flex; justify-content: center; }
+.dia-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: 100%; }
+.dia-compare > div { border: 2px solid var(--line); background: #F7F9F5; border-radius: 12px; padding: 22px 24px; display: flex; flex-direction: column; gap: 12px; }
+.dia-compare h4 { margin: 0; font-family: var(--f-display); font-size: 1.05em; color: var(--accent); }
+.dia-compare p { margin: 0; font-size: .86em; }
+
+.dia-binomial { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 18px 0; width: 100%; }
+.bn-row { display: flex; align-items: flex-end; gap: .5em; font-size: 1.9em; }
+.bn-row > div { display: flex; flex-direction: column; align-items: center; }
+.bn-word { font-style: italic; font-family: var(--f-body); line-height: 1; }
+.bn-word.author { font-style: normal; color: var(--ink-2); }
+.bn-word em { font-style: italic; background: var(--tag); padding: 0 .06em; border-radius: 4px; }
+.bn-brace { width: 100%; height: 14px; border: 3px solid var(--accent); border-top: 0; border-radius: 0 0 10px 10px; margin-top: 10px; }
+.bn-label { font-family: var(--f-mono); font-size: .6em; margin-top: 8px; text-align: center; line-height: 1.25; color: var(--accent); }
+.bn-note { font-family: var(--f-mono); font-size: .58em; color: var(--ink-2); }
+
+.dia-ladder { display: flex; gap: 22px; align-items: stretch; width: 100%; justify-content: center; }
+.ld-rungs { display: flex; flex-direction: column; gap: 8px; }
+.ld-rung { font-family: var(--f-display); font-weight: 700; font-size: .9em; color: #fff; background: var(--accent); border-radius: 8px; padding: 8px 18px; text-align: center; }
+.ld-rung small { display: block; font-family: var(--f-mono); font-weight: 500; font-size: .55em; opacity: .85; }
+.ld-trend { display: flex; flex-direction: column; justify-content: space-between; font-family: var(--f-mono); font-size: .6em; color: var(--ink-2); max-width: 15em; }
+.ld-arrow { flex: 1; width: 4px; background: var(--ink-2); margin: 10px 0 10px 18px; position: relative; }
+.ld-arrow::before { content: ""; position: absolute; top: -4px; left: -9px; border: 11px solid transparent; border-bottom: 16px solid var(--ink-2); border-top: 0; }
+
+.dia-tree { display: flex; flex-direction: column; align-items: center; width: 100%; }
+.tr-node { border: 2px solid var(--ink); background: #F7F9F5; border-radius: 10px; padding: 8px 16px; text-align: center; font-weight: 700; font-size: .82em; line-height: 1.15; }
+.tr-node small { display: block; font-weight: 400; font-size: .78em; color: var(--ink-2); }
+.tr-node.root { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tr-node.root small { color: #CFE0D7; }
+.tr-node.lvl1 { background: var(--accent-2); border-color: var(--accent); color: var(--ink); }
+.tr-kids { display: flex; gap: 14px; justify-content: center; margin-top: 30px; position: relative; flex-wrap: nowrap; }
+.tr-kids::before { content: ""; position: absolute; top: -16px; left: 8%; right: 8%; border-top: 3px solid var(--line); }
+.tr-col { display: flex; flex-direction: column; align-items: center; gap: 10px; position: relative; min-width: 0; }
+.tr-col::before { content: ""; position: absolute; top: -16px; height: 16px; border-left: 3px solid var(--line); }
+.tr-leaves { display: flex; flex-direction: column; gap: 8px; align-items: stretch; border-left: 3px solid var(--line); padding-left: 12px; }
+.tr-leaves .tr-node { font-weight: 400; font-size: .74em; border-width: 1.5px; }
+
+.dia-table { width: 100%; border-collapse: collapse; font-size: min(.74em, 27px); font-variant-numeric: tabular-nums; }
+.dia-table th, .dia-table td { border: 1.5px solid var(--line); padding: 10px 14px; text-align: left; vertical-align: top; }
+.dia-table thead th { background: var(--ink); color: var(--paper); font-family: var(--f-display); }
+.dia-table tbody th { font-family: var(--f-mono); font-weight: 500; font-size: .82em; color: var(--ink-2); background: var(--paper-2); }
+.dia-table td { background: #F7F9F5; hyphens: auto; -webkit-hyphens: auto; }
+
+.dia-timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 900px; }
+.dia-timeline li { display: grid; grid-template-columns: 4.2em 1fr; gap: 24px; align-items: center; }
+.dia-timeline .yr { font-family: var(--f-mono); font-weight: 500; font-size: 1.05em; color: #fff; background: var(--accent); border-radius: 8px; text-align: center; padding: 6px 0; }
+.dia-timeline .ev { font-size: 1em; border-bottom: 2px dashed var(--line); padding-bottom: 6px; }
+
+.dia-nested { position: relative; width: 100%; max-width: 760px; }
+.ns-ring { border: 3px solid var(--accent); border-radius: 26px; padding: 18px 22px 22px; background: rgba(255,255,255,.35); }
+.ns-ring > span { font-family: var(--f-display); font-weight: 700; color: var(--accent); }
+.ns-ring .ns-ring { margin-top: 12px; }
+
+.dia-chips { display: flex; flex-wrap: wrap; gap: 14px 10px; align-items: center; justify-content: center; }
+.dia-chips .chip { background: var(--accent); color: #fff; font-family: var(--f-display); font-weight: 700; padding: 14px 22px; border-radius: 999px; font-size: .9em; }
+.dia-chips .arr { font-family: var(--f-mono); color: var(--ink-2); font-size: 1em; }
+
+.dia-anim { width: 100%; max-width: 820px; }
+.dia-anim svg { width: 100%; height: auto; display: block; }
+.sl.portrait .dia-anim svg { max-height: 400px; }
+.sl.landscape .dia-anim svg { max-height: 640px; }
+.dia-table.nct td, .dia-table.nct th { font-size: 1em; }
+
+/* video caption frame */
+</style>
+
+<header class="wrap top">
+  <div>
+    <div class="eyebrow">NCERT Biology XI · Unit 3 · NEET revision</div>
+    <h1>Cell Cycle and Cell Division</h1>
+  </div>
+  <p class="lede">Chapter 10, complete: 10 voice-over explainer videos with animations, swipeable slides for every topic, a glossary, a stage lab and 20 practice MCQs. Content marked <span class="badge-extra">NEET tip</span> goes beyond the NCERT text.</p>
+</header>
+<nav class="tabs" aria-label="Sections"><div class="wrap">
+  <a href="#learn">Learn</a><a href="#glossary">Glossary</a><a href="#lab">Stage lab</a><a href="#quiz">Quiz</a>
+</div></nav>
+<main class="wrap">
+  <section id="v-learn" hidden>
+    <h2>Learn topic by topic</h2>
+    <p class="muted" style="margin:0">Watch the video, then flip through the slides to revise. Use ← → keys or swipe.</p>
+    <div class="topics" id="topics" role="group" aria-label="Topics"></div>
+    <div class="learn-grid">
+      <div>
+        <div class="panel-label"><span>Explainer video</span><span id="vid-name"></span></div>
+        <div class="video-box" id="video-box"></div>
+        <div class="notes" id="notes"></div>
+      </div>
+      <div class="viewer">
+        <div class="panel-label"><span>Revision slides</span><span id="slide-kind"></span></div>
+        <div class="slide-frame" id="frame" aria-live="polite"></div>
+        <div class="viewer-ctl">
+          <button class="btn" id="prev" aria-label="Previous slide">← Prev</button>
+          <span class="count" id="count"></span>
+          <button class="btn primary" id="next" aria-label="Next slide">Next →</button>
+        </div>
+        <div class="anim-ctl" id="anim-ctl" hidden><button class="btn" id="anim-play">▶ Play animation</button><span class="muted" id="anim-stage"></span></div>
+        <div class="dots" id="dots"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="v-glossary" hidden>
+    <h2>Glossary flashcards</h2>
+    <div class="gl-tools">
+      <input id="gl-q" type="search" placeholder="Search terms" aria-label="Search terms">
+      <button class="btn" id="gl-all">Show all definitions</button>
+      <button class="btn" id="gl-none">Hide all</button>
+    </div>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <section id="v-lab" hidden>
+    <h2>Stage lab</h2>
+    <p class="muted" style="margin:0 0 18px">Two drills straight from Figure 1.1 and Table 1.1.</p>
+    <div class="lab">
+      <div class="box">
+        <h3 style="margin:0;font-family:var(--f-display)">Build Figure 1.1</h3>
+        <p class="muted" style="margin:4px 0 0">Tap the categories in <b>ascending</b> order, from the lowest category up to the highest.</p>
+        <div class="built" id="built" aria-live="polite"></div>
+        <div class="pool" id="pool"></div>
+        <div class="status" id="lad-status"></div>
+        <button class="btn" id="lad-reset" style="margin-top:8px">Shuffle again</button>
+      </div>
+      <div class="box">
+        <h3 style="margin:0;font-family:var(--f-display)">Fill Table 1.1</h3>
+        <p class="muted" style="margin:4px 0 0">Pick an organism and choose each category.</p>
+        <div class="seg" id="org" role="group" aria-label="Organism"></div>
+        <div class="tbl-fill" id="tbl"></div>
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap"><button class="btn primary" id="tbl-check">Check</button><button class="btn" id="tbl-show">Show answers</button></div>
+        <div class="status" id="tbl-status"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="v-quiz" hidden>
+    <h2>NEET practice quiz</h2>
+    <p class="muted" style="margin:0 0 18px">20 MCQs built from Chapter 10. Your best score is remembered on this device.</p>
+    <div class="quiz box" id="quiz"></div>
+  </section>
+</main>
+<footer class="wrap muted">Source: NCERT Biology Class XI, Chapter 10 “Cell Cycle and Cell Division” (kebo110.pdf). Model answers, tips and MCQs are study aids written from that text.</footer>
+
+<script>const DATA = {"chapter":"Chapter 10 · Cell Cycle and Cell Division","short":"Cell Cycle and Cell Division","book":"NCERT Biology · Class XI · Unit 3","source":"https://ncert.nic.in/textbook/pdf/kebo110.pdf","specimen":"STAGE <i>Metaphase</i> · Ch 10","topics":[{"id":"01-cell-cycle-intro","short":"10.1 What is the cell cycle?","slides":[{"kind":"cover","eyebrow":"Chapter 10 · Opening","title":"Cell Cycle and Cell Division","sub":"How one cell becomes millions: the cell cycle, mitosis and meiosis.","say":["Welcome to Chapter 10, Cell Cycle and Cell Division. The chapter has five sections: the cell cycle, M phase, the significance of mitosis, meiosis, and the significance of meiosis. Let's begin with a simple question: how does one cell become a whole organism?"]},{"kind":"points","title":"One cell to millions","anim":{"scene":"cell","states":["interphase","interphase","cyto-animal","cyto-animal","syncytium4"],"still":"cyto-animal"},"points":["All organisms, even the largest, start their life from a <b>single cell</b>.","<b>Growth and reproduction</b> are characteristics of cells, indeed of all living organisms.","All cells reproduce by <b>dividing into two</b>: each parental cell gives rise to <b>two daughter cells</b> each time it divides.","Daughter cells can themselves grow and divide, forming a new <b>cell population</b> from a single parental cell and its progeny.","Such cycles of <b>growth and division</b> let a single cell form a structure of millions of cells."],"say":["Every organism, even the largest, starts life as a single cell.","Growth and reproduction are characteristics of cells, and of all living organisms.","Cells reproduce by dividing into two. Each parent cell gives rise to two daughter cells every time it divides.","These daughter cells can grow and divide again, so one parent cell and its progeny build a whole new cell population.","Repeat these cycles of growth and division, and a single cell becomes a structure of millions of cells."]},{"kind":"points","title":"10.1 Cell cycle: definition","anim":{"scene":"wheel","states":["all","all","all","S","M"],"still":"all"},"points":["Cell division is a very important process in all living organisms.","During division, <b>DNA replication</b> and <b>cell growth</b> also take place. All three must be <b>coordinated</b> so progeny cells get <b>intact genomes</b>.","<b>Cell cycle</b>: the sequence of events by which a cell <b>duplicates its genome</b>, <b>synthesises</b> the other constituents of the cell and eventually <b>divides into two daughter cells</b>.","Cell growth (cytoplasmic increase) is <b>continuous</b>, but <b>DNA synthesis occurs only during one specific stage</b> of the cell cycle.","Replicated chromosomes (DNA) are distributed to daughter nuclei by a complex series of events during cell division. These events are under <b>genetic control</b>."],"say":["Cell division is a very important process in every living organism.","While a cell divides, it also replicates its DNA and grows. These three processes must be coordinated, so that each daughter cell receives an intact genome.","So here is the definition. The cell cycle is the sequence of events by which a cell duplicates its genome, synthesises its other constituents, and finally divides into two daughter cells.","Notice the contrast. Cell growth, meaning increase in cytoplasm, is continuous. But DNA synthesis happens only in one specific stage of the cycle.","The replicated chromosomes are then shared between the daughter nuclei through a complex series of events, and all of these events are under genetic control."]}]},{"id":"02-phases-of-cell-cycle","short":"10.1.1 Phases: interphase & M phase","slides":[{"kind":"cover","eyebrow":"Section 10.1.1","title":"Phases of the cell cycle","sub":"Interphase and M phase, G1, S and G2, and how DNA content changes.","say":["Section 10.1.1, the phases of the cell cycle. We'll see how long the cycle takes, what interphase really does, and how DNA content changes."]},{"kind":"points","title":"How long is one cell cycle?","anim":{"scene":"wheel","states":["all","all","all"]},"points":["A typical eukaryotic cell cycle is illustrated by <b>human cells in culture</b>. They divide about <b>once every 24 hours</b> (Figure 10.1).","This duration varies from <b>organism to organism</b> and from <b>cell type to cell type</b>.","<b>Yeast</b> can progress through the cell cycle in only about <b>90 minutes</b>."],"say":["A typical eukaryotic cell cycle is shown by human cells growing in culture. They divide roughly once every twenty-four hours.","But this duration is not fixed. It varies between organisms, and between cell types.","Yeast, for example, can complete its cell cycle in only about ninety minutes."]},{"kind":"points","title":"Two basic phases","anim":{"scene":"wheel","states":["interphase","M","M","interphase","M"],"still":"interphase"},"points":["The cell cycle has two basic phases: <b>Interphase</b> and <b>M phase (Mitosis phase)</b>.","<b>M phase</b>: when the actual cell division or mitosis occurs.","<b>Interphase</b>: the phase <b>between two successive M phases</b>.","In a 24-hour human cell cycle, cell division proper lasts only <b>about an hour</b>. Interphase lasts <b>more than 95%</b> of the cycle.","M phase starts with <b>karyokinesis</b> (nuclear division, separation of daughter chromosomes) and usually ends with <b>cytokinesis</b> (division of cytoplasm)."],"say":["The cycle has just two basic phases: interphase and M phase, the mitosis phase.","M phase is when the actual division, mitosis, takes place.","Interphase is everything between two successive M phases.","And here's a number NEET loves. In a twenty-four hour human cell cycle, division itself lasts only about one hour. Interphase takes more than ninety-five percent of the time.","M phase begins with karyokinesis, the division of the nucleus where daughter chromosomes separate, and usually ends with cytokinesis, the division of the cytoplasm."]},{"kind":"points","title":"Interphase is not really ‘resting’","anim":{"scene":"wheel","states":["interphase","G1","S","G2"]},"points":["Interphase is called the <b>resting phase</b>, but the cell is <b>preparing for division</b>: cell growth and DNA replication happen in an orderly manner.","It has three phases: G<sub>1</sub> phase (<b>Gap 1</b>),","<b>S phase</b> (<b>Synthesis</b>),","and G<sub>2</sub> phase (<b>Gap 2</b>)."],"say":["Interphase is often called the resting phase, but the cell is anything but resting. It is preparing for division, growing and replicating its DNA in an orderly way.","Interphase has three parts. First, G one, which stands for gap one.","Then S phase, which stands for synthesis.","And finally G two, gap two."]},{"kind":"points","title":"G<sub>1</sub>, S and G<sub>2</sub> in detail","anim":{"scene":"graph","states":["dna-G1","dna-S","dna-S","dna-S","dna-G2"]},"points":["G<sub>1</sub>: the interval between mitosis and initiation of DNA replication. The cell is <b>metabolically active</b> and <b>continuously grows</b>, but does <b>not replicate its DNA</b>.","<b>S phase</b>: DNA synthesis or <b>replication</b> takes place. The amount of DNA per cell <b>doubles</b>: <b>2C → 4C</b>.","But there is <b>no increase in chromosome number</b>: a diploid (<b>2n</b>) cell at G<sub>1</sub> is still <b>2n</b> after S phase.","In <b>animal cells</b>, during S phase DNA replication begins in the <b>nucleus</b> and the <b>centriole duplicates</b> in the <b>cytoplasm</b>.","G<sub>2</sub>: <b>proteins are synthesised</b> in preparation for mitosis while <b>cell growth continues</b>."],"say":["G one is the gap between mitosis and the start of DNA replication. The cell is metabolically active and keeps growing, but it does not copy its DNA yet.","In S phase, DNA is replicated, so the DNA content per cell doubles. If we call the starting amount two C, it becomes four C.","But careful: the chromosome number does not change. A diploid cell, two n, at G one is still two n after S phase. Each chromosome now simply has two chromatids.","In animal cells, while DNA replicates in the nucleus during S phase, the centriole duplicates out in the cytoplasm.","In G two, the cell synthesises proteins needed for mitosis, and it continues to grow."]},{"kind":"qa","q":"In-text question: How do plants and animals keep growing all their lives? Which tissues in higher plants have cells that divide all their life? Do animals have them?","a":["Not all cells divide all the time. Growth continues because some cells keep dividing by mitosis.","In higher plants these are the <b>meristematic tissues</b>: <b>apical meristems</b> at root and shoot tips and the <b>lateral meristems</b> (vascular cambium, cork cambium).","Animals have <b>no meristems</b>. Growth is limited, but some cells keep dividing to replace lost ones, e.g. skin, gut lining and blood cells (stem cells, beyond NCERT)."],"say":["Pause and think. How do plants keep growing all their lives, and which tissues make that possible?","Not every cell divides. Growth continues because a few groups of cells keep dividing.","In higher plants, these are meristems: apical meristems at the tips of roots and shoots, and lateral meristems like the vascular cambium and cork cambium.","Animals don't have meristems. But some animal cells keep dividing to replace lost cells, like those of the skin, the gut lining and blood."]},{"kind":"qa","q":"In-text question: Onion root tip cells have 16 chromosomes. How many chromosomes at G1, after S and after M? If DNA after M is 2C, what is it at G1, after S and at G2?","a":["Chromosomes: <b>16 at G<sub>1</sub></b>, <b>16 after S</b> (each now has two chromatids), <b>16 after M</b> in each daughter cell.","DNA: <b>2C at G<sub>1</sub></b>, <b>4C after S</b>, <b>4C at G<sub>2</sub></b>, back to <b>2C</b> after M."],"say":["Here's a favourite numerical. Onion root tip cells have sixteen chromosomes. Try it yourself first.","The chromosome number stays sixteen at G one, after S phase, and after M phase in each daughter cell, because S phase doesn't change the number of chromosomes.","But DNA content changes. It's two C at G one, four C after S and at G two, and back to two C after mitosis."]}]},{"id":"03-g0-and-who-divides","short":"G0 & who divides by mitosis","slides":[{"kind":"cover","eyebrow":"Section 10.1.1 · continued","title":"G0, and which cells divide by mitosis","sub":"The quiescent stage, and mitosis in haploid and diploid cells.","say":["Still in section 10.1.1. Now, what about cells that stop dividing? And which cells divide by mitosis at all?"]},{"kind":"points","title":"Quiescent stage: G<sub>0</sub>","anim":{"scene":"wheel","states":["all","all","G0","G0"]},"points":["Some cells in adult animals <b>do not appear to divide</b>, e.g. <b>heart cells</b>.","Many other cells divide only occasionally, to <b>replace cells lost</b> through injury or cell death.","Cells that do not divide further <b>exit G<sub>1</sub></b> and enter an inactive stage called the <b>quiescent stage (G<sub>0</sub>)</b>.","Cells in G<sub>0</sub> remain <b>metabolically active</b> but no longer <b>proliferate</b> unless called on to do so, depending on the organism’s requirement."],"say":["Some cells in adult animals don't seem to divide at all. Heart cells are the classic example.","Many other cells divide only now and then, to replace cells lost to injury or cell death.","Cells that stop dividing leave the cycle from G one, and enter an inactive stage called the quiescent stage, or G zero.","Remember this point: cells in G zero are still metabolically active. They simply don't proliferate, unless the organism needs them to."]},{"kind":"points","title":"Who divides by mitosis?","anim":{"scene":"cell","states":["metaphase","metaphase","metaphase"]},"points":["In <b>animals</b>, mitotic cell division is seen only in <b>diploid somatic cells</b>.","Exceptions: a few <b>haploid</b> cells divide by mitosis, for example in <b>male honey bees</b>.","<b>Plants</b> show mitotic divisions in <b>both haploid and diploid</b> cells."],"say":["In animals, mitosis happens only in diploid somatic cells, the body cells.","There are a few exceptions where haploid cells divide by mitosis. The NCERT example is male honey bees.","Plants are different. They show mitosis in both haploid and diploid cells."]},{"kind":"qa","q":"In-text question: Recall alternation of generations (Chapter 3). Name plant species and stages where mitosis occurs in haploid cells.","a":["Haploid <b>gametophytes</b> grow by mitosis. Examples: algae such as <i>Spirogyra</i> and <i>Chlamydomonas</i> (haploid plant body).","<b>Mosses</b> (e.g. <i>Funaria</i>): the dominant gametophyte. <b>Ferns</b>: the prothallus.","<b>Flowering plants</b>: microspore → pollen grain divisions; the functional megaspore nucleus divides by mitosis to form the embryo sac."],"say":["Think back to alternation of generations. Where do haploid plant cells divide by mitosis?","Wherever there is a haploid gametophyte. Algae like Spirogyra and Chlamydomonas have a haploid body.","In mosses, the main plant body is the haploid gametophyte, and in ferns, the prothallus is haploid.","Even in flowering plants, the pollen grain and the embryo sac form by mitosis in haploid cells."]},{"kind":"points","extra":true,"title":"NEET tip: G<sub>0</sub> and cell-cycle traps","points":["G<sub>0</sub> cells are <b>alive and metabolically active</b>, not dead or dormant in metabolism.","Cells enter G<sub>0</sub> from <b>G<sub>1</sub></b>, not from G<sub>2</sub>.","S phase doubles <b>DNA (C)</b>, never chromosome number (<b>n</b>).","Centriole duplication happens in <b>S phase</b> (cytoplasm). Protein synthesis for mitosis happens in <b>G<sub>2</sub></b>.","Interphase > 95% of the cycle. M phase is about 1 hour of 24."],"say":["Quick traps. G zero cells are alive and metabolically active.","They exit from G one, not G two.","S phase doubles DNA content, never the chromosome number.","Centrioles duplicate in S phase; proteins for mitosis are made in G two.","And interphase is over ninety-five percent of the cycle."]}]},{"id":"04-prophase-metaphase","short":"10.2 M phase: prophase & metaphase","slides":[{"kind":"cover","eyebrow":"Section 10.2 · Part A","title":"M phase: prophase & metaphase","sub":"Equational division, chromosome condensation, the mitotic apparatus and the metaphase plate.","say":["Section 10.2, M phase. This is the most dramatic part of the cell cycle. Watch the chromosomes carefully."]},{"kind":"points","title":"M phase: the big picture","anim":{"scene":"cell","states":["interphase","metaphase","anaphase-late","telophase"]},"points":["The <b>most dramatic</b> period of the cell cycle, involving a major <b>reorganisation of virtually all components</b> of the cell.","Parent and progeny cells have the <b>same number of chromosomes</b>, so mitosis is also called <b>equational division</b>.","For convenience, karyokinesis is divided into four stages, but cell division is a <b>progressive process</b>; very clear-cut lines cannot be drawn between stages.","Karyokinesis involves four stages: <b>Prophase, Metaphase, Anaphase, Telophase</b>."],"say":["M phase is the most dramatic period of the cell cycle. Almost every component of the cell is reorganised.","Since the parent and daughter cells have the same number of chromosomes, mitosis is also called equational division.","We split it into stages for convenience, but remember, division is a continuous, progressive process. There are no sharp lines between stages.","Karyokinesis has four stages: prophase, metaphase, anaphase and telophase. Remember them as P, M, A, T."]},{"kind":"points","title":"10.2.1 Prophase","anim":{"scene":"cell","states":["interphase","prophase-early","prophase-early","prophase-late","prophase-late"]},"points":["The <b>first stage</b> of karyokinesis; it follows the S and G<sub>2</sub> phases of interphase.","In S and G<sub>2</sub>, the new DNA molecules are <b>not distinct but intertwined</b>. Prophase is marked by the <b>initiation of condensation</b> of chromosomal material, which becomes untangled (Figure 10.2 a).","Chromosomal material condenses to form compact <b>mitotic chromosomes</b>, each of <b>two chromatids attached at the centromere</b>.","The <b>centrosome</b>, duplicated during S phase, begins to move towards <b>opposite poles</b>. Each centrosome radiates microtubules called <b>asters</b>. Two asters plus spindle fibres form the <b>mitotic apparatus</b>.","At the end of prophase, cells do <b>not show Golgi complexes, endoplasmic reticulum, nucleolus and nuclear envelope</b>."],"say":["Prophase is the first stage of karyokinesis. It comes right after the S and G two phases.","During S and G two, the new DNA molecules are intertwined and not distinct. Prophase begins when this chromosomal material starts to condense and untangle.","Watch the chromosomes become compact. Each mitotic chromosome is made of two chromatids, joined at the centromere.","Meanwhile the centrosome, which duplicated in S phase, moves toward opposite poles. Each centrosome sends out microtubules called asters. The two asters with the spindle fibres form the mitotic apparatus.","By the end of prophase, you can no longer see the Golgi complex, endoplasmic reticulum, nucleolus or nuclear envelope."]},{"kind":"points","title":"10.2.2 Metaphase","anim":{"scene":"cell","states":["prophase-late","metaphase","metaphase","metaphase","metaphase"]},"points":["Starts with the <b>complete disintegration of the nuclear envelope</b>; chromosomes spread through the cytoplasm.","Condensation is complete, so this is the stage at which <b>chromosome morphology is most easily studied</b>. Each chromosome has <b>two sister chromatids held by the centromere</b>.","<b>Kinetochores</b>: small <b>disc-shaped structures</b> at the surface of centromeres; the sites where <b>spindle fibres attach</b>.","All chromosomes come to lie at the <b>equator</b>; one chromatid is connected by its kinetochore to fibres from one pole, its sister to fibres from the opposite pole.","The plane of alignment is the <b>metaphase plate</b>. Key features: <b>spindle fibres attach to kinetochores</b>; chromosomes move to the spindle equator and <b>align along the metaphase plate</b>."],"say":["Metaphase begins when the nuclear envelope completely disintegrates, so the chromosomes spread through the cytoplasm.","Condensation is now complete. That makes metaphase the best stage to study the shape, or morphology, of chromosomes. Each one has two sister chromatids held together at the centromere.","On the surface of each centromere are small disc-shaped structures called kinetochores. This is where spindle fibres attach.","All the chromosomes line up at the equator. One chromatid is attached to fibres from one pole, and its sister is attached to fibres from the opposite pole.","This plane of alignment is called the metaphase plate. So the two key features of metaphase are: spindle fibres attach to kinetochores, and chromosomes align on the metaphase plate."]},{"kind":"points","extra":true,"title":"NEET tip: prophase & metaphase","points":["Mnemonic for the order: <b>P</b>lease <b>M</b>ake <b>A</b> <b>T</b>ea (Prophase, Metaphase, Anaphase, Telophase).","Chromosome counting and karyotyping use <b>metaphase</b> chromosomes.","<b>Colchicine</b> stops spindle formation and arrests cells at metaphase (beyond NCERT).","Centrioles are <b>absent</b> in most higher plant cells, which still form a spindle (beyond NCERT)."],"say":["To remember the order, say: Please Make A Tea.","Metaphase chromosomes are used for counting and karyotypes.","Colchicine blocks spindle formation and holds cells in metaphase.","And most higher plant cells lack centrioles, but they still make a spindle."]}]},{"id":"05-anaphase-to-cytokinesis","short":"Anaphase, telophase & cytokinesis","slides":[{"kind":"cover","eyebrow":"Section 10.2 · Part B","title":"Anaphase, telophase & cytokinesis","sub":"Chromatids move apart, nuclei reform, and the cell splits: furrow in animals, cell plate in plants.","say":["Section 10.2, part B. The chromosomes are lined up. Now they separate, and the cell splits in two."]},{"kind":"points","title":"10.2.3 Anaphase","anim":{"scene":"cell","states":["metaphase","anaphase-early","anaphase-late","anaphase-late"]},"points":["At the onset, each chromosome at the metaphase plate <b>splits simultaneously</b>; the two daughter chromatids, now called <b>daughter chromosomes</b>, migrate to <b>opposite poles</b>.","As each chromosome moves away, its <b>centromere stays directed towards the pole</b>, at the leading edge, with the <b>arms trailing behind</b> (Figure 10.2 c).","Key events: <b>centromeres split and chromatids separate</b>;","<b>chromatids move to opposite poles</b>."],"say":["At the start of anaphase, every chromosome on the metaphase plate splits at the same time. The two chromatids, now called daughter chromosomes, begin moving to opposite poles.","Look at their shape as they move. The centromere leads, pointing toward the pole, and the arms trail behind. That's why anaphase chromosomes look like a V.","So the first key event: the centromeres split and the chromatids separate.","And the second: the chromatids move to opposite poles."]},{"kind":"points","title":"10.2.4 Telophase","anim":{"scene":"cell","states":["anaphase-late","telophase","telophase","telophase"]},"points":["At the final stage of karyokinesis, chromosomes that reached the poles <b>decondense and lose their individuality</b>; chromatin collects at each pole (Figure 10.2 d).","Chromosomes <b>cluster at opposite spindle poles</b> and their identity is lost as discrete elements.","<b>Nuclear envelope develops</b> around the clusters at each pole, forming <b>two daughter nuclei</b>.","<b>Nucleolus, Golgi complex and ER reform</b>."],"say":["Telophase is the final stage of karyokinesis. The chromosomes that reached the poles decondense and lose their individuality.","They cluster at the opposite poles, and can no longer be seen as separate chromosomes.","A nuclear envelope forms around each cluster, giving two daughter nuclei.","And the nucleolus, Golgi complex and endoplasmic reticulum reform. Basically, telophase reverses prophase."]},{"kind":"points","title":"10.2.5 Cytokinesis in animal cells","anim":{"scene":"cell","states":["telophase","cyto-animal-mid","cyto-animal"]},"points":["Mitosis segregates duplicated chromosomes into daughter nuclei (<b>karyokinesis</b>); then the cell itself divides by separation of cytoplasm: <b>cytokinesis</b> (Figure 10.2 e).","In an <b>animal cell</b>, a <b>furrow</b> appears in the plasma membrane.","The furrow gradually <b>deepens</b> and finally <b>joins in the centre</b>, dividing the cytoplasm into two."],"say":["Karyokinesis gave us two nuclei. Now cytokinesis divides the cytoplasm, and only then is cell division complete.","In an animal cell, a furrow appears in the plasma membrane.","Watch it deepen until it meets in the centre, pinching the cell into two."]},{"kind":"points","title":"Cytokinesis in plant cells","anim":{"scene":"cell","states":["plant-telophase","plant-plate","plant-plate","plant-done","plant-done"]},"points":["Plant cells are enclosed by a relatively <b>inextensible cell wall</b>, so they divide by a different mechanism.","Wall formation starts in the <b>centre</b> of the cell and grows <b>outward</b> to meet the existing lateral walls.","It begins with a simple precursor called the <b>cell-plate</b>, which represents the <b>middle lamella</b> between the walls of two adjacent cells.","During cytoplasmic division, organelles like <b>mitochondria and plastids</b> are distributed between the two daughter cells.","In some organisms <b>karyokinesis is not followed by cytokinesis</b>, giving a multinucleate condition called <b>syncytium</b>, e.g. <b>liquid endosperm in coconut</b>."],"say":["Plant cells have a stiff, inextensible cell wall, so they can't pinch in. They use a different method.","The new wall starts in the centre of the cell and grows outward until it meets the side walls. That's the opposite direction to the animal furrow.","It begins as a cell plate, which becomes the middle lamella between the walls of the two new cells.","As the cytoplasm divides, organelles such as mitochondria and plastids are shared between the daughter cells.","Sometimes karyokinesis happens without cytokinesis. The result is one cell with many nuclei, called a syncytium. The NCERT example is the liquid endosperm of coconut."]},{"kind":"points","title":"Syncytium: many nuclei, one cell","anim":{"scene":"cell","states":["syncytium4"]},"points":["Karyokinesis without cytokinesis → <b>multinucleate</b> cell = <b>syncytium</b>. Example: <b>liquid endosperm of coconut</b>."],"say":["Here's what a syncytium looks like: several nuclei sharing one cytoplasm, because the nuclei divided but the cell didn't. Coconut's liquid endosperm is the example to remember."]},{"kind":"points","extra":true,"title":"NEET tip: animal vs plant cytokinesis","diagram":{"type":"compare","left":{"h":"Animal cell","items":["<b>Furrow</b> in plasma membrane","Grows from <b>periphery → centre</b> (centripetal)"]},"right":{"h":"Plant cell","items":["<b>Cell plate</b> (middle lamella)","Grows from <b>centre → periphery</b> (centrifugal)"]}},"points":["Terms centripetal and centrifugal are beyond NCERT but common in NEET options.","Anaphase chromosomes look V, J or I shaped depending on centromere position (beyond NCERT)."],"say":["Remember the direction. Animal furrows grow inward, centripetally. Plant cell plates grow outward, centrifugally.","And anaphase chromosomes can look V, J or I shaped, depending on where the centromere sits."]}]},{"id":"06-significance-of-mitosis","short":"10.3 Significance of mitosis","slides":[{"kind":"cover","eyebrow":"Section 10.3","title":"Significance of mitosis","sub":"Why organisms need equational division.","say":["Section 10.3. Why does mitosis matter so much?"]},{"kind":"points","title":"Where mitosis happens","anim":{"scene":"cell","states":["metaphase","metaphase"]},"points":["Mitosis, the <b>equational division</b>, is usually restricted to <b>diploid cells</b> only.","However, in some <b>lower plants</b> and some <b>social insects</b>, <b>haploid cells</b> also divide by mitosis."],"say":["Mitosis, the equational division, usually happens only in diploid cells.","But in some lower plants and some social insects, like the male honey bee, haploid cells also divide by mitosis."]},{"kind":"points","title":"Why mitosis matters","anim":{"scene":"cell","states":["cyto-animal","cyto-animal","telophase","cyto-animal","plant-done"],"still":"cyto-animal"},"points":["Mitosis usually produces <b>diploid daughter cells with identical genetic complement</b>.","<b>Growth</b> of multicellular organisms is due to mitosis.","Cell growth <b>disturbs the ratio between nucleus and cytoplasm</b>; the cell must divide to <b>restore the nucleo-cytoplasmic ratio</b>.","<b>Cell repair</b>: cells of the <b>upper layer of the epidermis</b>, the <b>lining of the gut</b> and <b>blood cells</b> are constantly replaced.","Mitotic divisions in <b>meristematic tissues</b>, the <b>apical</b> and <b>lateral cambium</b>, give <b>continuous growth of plants</b> throughout their life."],"say":["Mitosis usually produces diploid daughter cells that are genetically identical to each other.","All the growth of a multicellular organism comes from mitosis.","As a cell grows, its cytoplasm increases faster than its nucleus, and the nucleo-cytoplasmic ratio gets disturbed. Dividing restores this ratio.","Mitosis also repairs the body. Cells of the upper epidermis, the gut lining and blood cells are constantly being replaced.","And in plants, mitosis in the apical and lateral meristems lets them keep growing throughout their lives."]}]},{"id":"07-meiosis-prophase-1","short":"10.4 Meiosis & prophase I","slides":[{"kind":"cover","eyebrow":"Section 10.4 · Part A","title":"Meiosis and the five stages of prophase I","sub":"Reduction division, synapsis, crossing over and chiasmata.","say":["Section 10.4, meiosis. This is the part that NEET asks about most. Pay close attention to prophase one."]},{"kind":"points","title":"What is meiosis?","anim":{"scene":"graph","states":["meio-all","meio-all","meio-all","meio-all"]},"points":["Sexual reproduction involves the <b>fusion of two gametes</b>, each with a complete <b>haploid</b> set of chromosomes.","Gametes form from <b>specialised diploid cells</b> by a division that <b>reduces chromosome number by half</b>, producing <b>haploid daughter cells</b>. This is <b>meiosis</b>.","Meiosis ensures the <b>haploid phase</b> in the life cycle of sexually reproducing organisms; <b>fertilisation restores the diploid phase</b>.","Meiosis occurs during <b>gametogenesis</b> in plants and animals, forming haploid gametes."],"say":["In sexual reproduction, two gametes fuse, and each gamete carries a complete haploid set of chromosomes.","Gametes come from special diploid cells, through a division that halves the chromosome number and gives haploid daughter cells. This division is meiosis.","Meiosis creates the haploid phase of the life cycle, and fertilisation restores the diploid phase.","We see meiosis during gametogenesis, the formation of gametes, in both plants and animals."]},{"kind":"points","title":"Key features of meiosis","anim":{"scene":"cell","states":["interphase","metaphase-1","pachytene-x","telophase-2"]},"points":["<b>Two sequential cycles</b> of nuclear and cell division, <b>meiosis I and meiosis II</b>, but only a <b>single cycle of DNA replication</b>.","Meiosis I begins <b>after</b> parental chromosomes have replicated to produce <b>identical sister chromatids</b> in S phase.","Involves <b>pairing of homologous chromosomes</b> and <b>recombination between non-sister chromatids</b> of homologous chromosomes.","<b>Four haploid cells</b> form at the end of meiosis II."],"say":["Four key features. One: meiosis has two rounds of division, meiosis one and meiosis two, but DNA is replicated only once.","Two: meiosis one starts only after the chromosomes have replicated in S phase, giving identical sister chromatids.","Three: homologous chromosomes pair up, and non-sister chromatids recombine. You'll see this happen shortly.","Four: at the end of meiosis two, there are four haploid cells."]},{"kind":"points","title":"Phases of meiosis","diagram":{"type":"compare","left":{"h":"Meiosis I","items":["Prophase I","Metaphase I","Anaphase I","Telophase I"]},"right":{"h":"Meiosis II","items":["Prophase II","Metaphase II","Anaphase II","Telophase II"]}},"points":["<b>Prophase I</b> is typically <b>longer and more complex</b> than prophase of mitosis, and is subdivided into five phases based on chromosomal behaviour: <b>Leptotene, Zygotene, Pachytene, Diplotene, Diakinesis</b>."],"say":["Each meiotic division has its own prophase, metaphase, anaphase and telophase. Prophase one is much longer and more complex than mitotic prophase, so it's split into five stages: leptotene, zygotene, pachytene, diplotene and diakinesis."]},{"kind":"points","title":"Leptotene & zygotene","anim":{"scene":"cell","states":["leptotene","leptotene","zygotene","zygotene","zygotene"]},"points":["<b>Leptotene</b>: chromosomes become <b>gradually visible</b> under the light microscope; <b>compaction continues</b> throughout leptotene.","<b>Zygotene</b>: chromosomes start <b>pairing</b>. This association is <b>synapsis</b>; the paired chromosomes are <b>homologous chromosomes</b>.","Electron micrographs show synapsis is accompanied by a complex structure, the <b>synaptonemal complex</b>.","The complex formed by a pair of synapsed homologous chromosomes is a <b>bivalent</b> or a <b>tetrad</b> (more clearly visible in the next stage).","The first two stages are <b>relatively short-lived</b> compared with pachytene."],"say":["In leptotene, the chromosomes slowly become visible under a light microscope, and they keep compacting.","In zygotene, homologous chromosomes start to pair. Watch them come together. This pairing is called synapsis.","Electron microscopes show that synapsis comes with a special structure between the pair, the synaptonemal complex.","A pair of synapsed homologous chromosomes is called a bivalent, or a tetrad.","Leptotene and zygotene are short compared with the next stage, pachytene."]},{"kind":"points","title":"Pachytene: crossing over","anim":{"scene":"cell","states":["pachytene","pachytene","pachytene-x","pachytene-x","pachytene-x"]},"points":["The <b>four chromatids</b> of each bivalent become distinct and clearly appear as <b>tetrads</b>.","<b>Recombination nodules</b> appear: the sites where <b>crossing over</b> occurs between <b>non-sister chromatids</b> of homologous chromosomes.","<b>Crossing over</b> is the exchange of genetic material between two homologous chromosomes. It is <b>enzyme-mediated</b>; the enzyme is <b>recombinase</b>.","Crossing over leads to <b>recombination</b> of genetic material on the two chromosomes.","Recombination is <b>completed by the end of pachytene</b>, leaving chromosomes <b>linked at the sites of crossing over</b>."],"say":["In pachytene, all four chromatids of each bivalent become distinct. Now you can clearly see the tetrad.","Small recombination nodules appear. These mark the sites where crossing over will happen between non-sister chromatids.","Watch the tips swap colour. Crossing over is the exchange of genetic material between homologous chromosomes. It is enzyme-mediated, and the enzyme is recombinase.","The result is recombination: each chromosome now carries a new mix of maternal and paternal genes.","By the end of pachytene, recombination is complete, and the chromosomes stay linked at the crossover sites."]},{"kind":"points","title":"Diplotene & diakinesis","anim":{"scene":"cell","states":["diplotene","diplotene","diplotene","diakinesis","diakinesis","diakinesis"]},"points":["<b>Diplotene</b> begins with <b>dissolution of the synaptonemal complex</b>; recombined homologues tend to separate <b>except at the sites of crossovers</b>.","These <b>X-shaped structures</b> are called <b>chiasmata</b>.","In <b>oocytes of some vertebrates</b>, diplotene can last for <b>months or years</b>.","<b>Diakinesis</b>, the final stage of prophase I, is marked by <b>terminalisation of chiasmata</b>.","Chromosomes are <b>fully condensed</b> and the <b>meiotic spindle is assembled</b>. By the end, the <b>nucleolus disappears</b> and the <b>nuclear envelope breaks down</b>.","Diakinesis represents the <b>transition to metaphase</b>."],"say":["Diplotene starts when the synaptonemal complex dissolves. The homologous chromosomes begin to move apart, except where they crossed over.","Those crossover points form X-shaped structures called chiasmata.","Here's an interesting fact: in the oocytes of some vertebrates, diplotene can last for months, or even years.","Diakinesis is the last stage of prophase one. Watch the chiasmata slide toward the ends of the chromosomes. This is called terminalisation.","The chromosomes are now fully condensed and the meiotic spindle assembles. The nucleolus disappears and the nuclear envelope breaks down.","So diakinesis is the transition into metaphase one."]},{"kind":"points","extra":true,"title":"NEET tip: prophase I in one line each","points":["Order mnemonic: <b>L</b>azy <b>Z</b>ebras <b>P</b>refer <b>D</b>ark <b>D</b>ays.","Leptotene: condensation · Zygotene: <b>synapsis, synaptonemal complex</b> · Pachytene: <b>crossing over, recombinase, recombination nodules</b>","Diplotene: <b>chiasmata</b>, SC dissolves · Diakinesis: <b>terminalisation</b>, nucleolus & envelope disappear.","Crossing over is between <b>non-sister</b> chromatids of <b>homologous</b> chromosomes.","Longest stage of prophase I in vertebrate oocytes: <b>diplotene</b> (dictyotene, beyond NCERT)."],"say":["Order: Lazy Zebras Prefer Dark Days.","Zygotene means synapsis, and pachytene means crossing over with the enzyme recombinase.","Diplotene shows chiasmata; diakinesis shows terminalisation.","Crossing over is always between non-sister chromatids of homologous chromosomes.","And diplotene can last years in vertebrate oocytes."]}]},{"id":"08-meiosis-1-and-2","short":"Metaphase I to telophase II","slides":[{"kind":"cover","eyebrow":"Section 10.4 · Part B & 10.5","title":"Meiosis I to meiosis II, and why meiosis matters","sub":"Bivalents on the plate, homologues separate, dyad, interkinesis, tetrad of four haploid cells.","say":["Section 10.4, part B. We follow the chromosomes from metaphase one to the four haploid cells, then look at why meiosis matters."]},{"kind":"points","title":"Metaphase I & anaphase I","anim":{"scene":"cell","states":["metaphase-1","metaphase-1","anaphase-1","anaphase-1"]},"points":["<b>Metaphase I</b>: the <b>bivalent chromosomes align on the equatorial plate</b> (Figure 10.3).","Microtubules from opposite poles attach to the <b>kinetochore of homologous chromosomes</b>.","<b>Anaphase I</b>: the <b>homologous chromosomes separate</b>,","while <b>sister chromatids remain associated at their centromeres</b>."],"say":["In metaphase one, the bivalents line up on the equatorial plate. Notice they line up in pairs, unlike mitosis.","Spindle fibres from opposite poles attach to the kinetochores of the two homologous chromosomes.","In anaphase one, the homologous chromosomes separate and move to opposite poles.","But the sister chromatids stay together, joined at their centromeres. This is the key difference from mitotic anaphase."]},{"kind":"points","title":"Telophase I & interkinesis","anim":{"scene":"cell","states":["telophase-1","dyad","dyad","dyad"]},"points":["<b>Telophase I</b>: nuclear membrane and nucleolus <b>reappear</b>; <b>cytokinesis</b> follows, giving a <b>dyad of cells</b> (Figure 10.3).","Chromosomes may disperse somewhat but do not reach the extremely extended state of the interphase nucleus.","<b>Interkinesis</b>: the stage between the two meiotic divisions; generally <b>short-lived</b>. There is <b>no replication of DNA</b> during interkinesis.","Interkinesis is followed by <b>prophase II</b>, a much simpler prophase than prophase I."],"say":["In telophase one, the nuclear membrane and nucleolus reappear, and cytokinesis follows. The two cells formed are called a dyad.","The chromosomes may loosen a little, but they don't fully extend like in interphase.","The short gap between the two divisions is called interkinesis. And remember: there is no DNA replication during interkinesis.","Next comes prophase two, which is much simpler than prophase one."]},{"kind":"points","title":"10.4.2 Meiosis II","anim":{"scene":"cell","states":["prophase-2","prophase-2","metaphase-2","anaphase-2","telophase-2"]},"points":["<b>Prophase II</b>: starts <b>immediately after cytokinesis</b>, usually before chromosomes have fully elongated. Meiosis II <b>resembles a normal mitosis</b>.","The <b>nuclear membrane disappears</b> by the end of prophase II; chromosomes again become compact (Figure 10.4).","<b>Metaphase II</b>: chromosomes align at the <b>equator</b>; microtubules from opposite poles attach to the <b>kinetochores of sister chromatids</b>.","<b>Anaphase II</b>: simultaneous <b>splitting of the centromere</b> of each chromosome; sister chromatids move to opposite poles by <b>shortening of microtubules</b> attached to kinetochores.","<b>Telophase II</b>: two groups of chromosomes are again enclosed by a nuclear envelope; cytokinesis gives a <b>tetrad of cells</b>, i.e. <b>four haploid daughter cells</b> (Figure 10.4)."],"say":["Prophase two begins right after cytokinesis, often before the chromosomes have fully stretched out. Meiosis two looks just like a normal mitosis.","By the end of prophase two, the nuclear membrane disappears and the chromosomes become compact again.","In metaphase two, chromosomes line up at the equator of each cell, and spindle fibres attach to the kinetochores of the sister chromatids.","In anaphase two, the centromeres split at the same time, and the sister chromatids are pulled to opposite poles as the microtubules shorten.","In telophase two, a nuclear envelope forms around each group, and cytokinesis gives a tetrad of cells: four haploid daughter cells."]},{"kind":"points","title":"10.5 Significance of meiosis","anim":{"scene":"graph","states":["meio-all","meio-all","meio-all"]},"points":["Meiosis <b>conserves the specific chromosome number</b> of each species across generations in sexually reproducing organisms, even though the process, <b>paradoxically</b>, halves the chromosome number.","It <b>increases genetic variability</b> in the population from one generation to the next.","<b>Variations</b> are very important for the process of <b>evolution</b>."],"say":["Meiosis keeps the chromosome number of each species constant across generations. It's a paradox: it halves the number, yet that's exactly what keeps it constant, because fertilisation doubles it again.","Meiosis also increases genetic variability from one generation to the next, through crossing over and independent assortment.","And these variations are very important for evolution."]},{"kind":"points","extra":true,"title":"NEET tip: anaphase comparisons","diagram":{"type":"compare","left":{"h":"Anaphase (mitosis) & anaphase II","items":["<b>Centromeres split</b>","<b>Sister chromatids</b> separate"]},"right":{"h":"Anaphase I","items":["Centromeres <b>do not split</b>","<b>Homologous chromosomes</b> separate; chromosome number halves"]}},"points":["Reduction in chromosome number happens in <b>meiosis I</b>. Meiosis II is equational.","No DNA replication between meiosis I and II (interkinesis)."],"say":["In mitosis and anaphase two, centromeres split and sisters separate. In anaphase one, centromeres don't split; homologues separate.","So the reduction happens in meiosis one. Meiosis two is equational.","And again, no DNA replication in interkinesis."]}]},{"id":"09-summary-exercises","short":"Summary & 16 exercises","slides":[{"kind":"cover","eyebrow":"Revision","title":"Summary & all 16 exercises","sub":"The NCERT summary and model answers to every end-of-chapter exercise.","say":["Time to revise. First the NCERT summary, then all sixteen exercises with model answers. Pause before each answer and try it yourself."]},{"kind":"points","title":"Summary (NCERT) · cell cycle & mitosis","points":["Cell theory: <b>cells arise from pre-existing cells</b>; the process is <b>cell division</b>.","Sexually reproducing organisms start from a single-celled <b>zygote</b>; division continues throughout the life cycle.","Cell cycle = <b>Interphase</b> (preparation) + <b>M phase</b> (actual division). Interphase = G<sub>1</sub>, S, G<sub>2</sub>.","G<sub>1</sub>: growth, normal metabolism, <b>most organelle duplication</b>. S: <b>DNA replication and chromosome duplication</b>. G<sub>2</sub>: <b>cytoplasmic growth</b>.","Prophase: condensation, centrioles to poles, nuclear envelope and nucleolus disappear, spindle fibres appear. Metaphase: alignment at the equatorial plate.","Anaphase: centromeres divide, chromatids move to poles. Telophase: chromosomes elongate, nucleolus and nuclear membrane reappear. Then <b>cytokinesis</b>.","Mitosis is <b>equational</b>: parent chromosome number is conserved in daughter cells."],"say":["Cell theory says cells come from pre-existing cells, through cell division.","A sexually reproducing organism starts as one zygote, and its cells keep dividing all through life.","The cell cycle has interphase, the preparation, and M phase, the actual division. Interphase is G one, S and G two.","G one is growth and normal metabolism, when most organelles duplicate. S is DNA replication. G two is cytoplasmic growth.","In prophase, chromosomes condense and the nuclear envelope disappears. In metaphase, they align at the equator.","In anaphase, centromeres divide and chromatids move apart. In telophase, nuclei reform. Then cytokinesis.","Mitosis conserves the chromosome number. That's why it's equational."]},{"kind":"points","title":"Summary (NCERT) · meiosis","points":["Meiosis occurs in <b>diploid cells destined to form gametes</b>. It is the <b>reduction division</b>: it halves the chromosome number; fertilisation restores it.","Two phases: meiosis I and meiosis II. In meiosis I, homologues pair to form <b>bivalents</b> and undergo <b>crossing over</b>.","Long prophase I with five phases: <b>leptotene, zygotene, pachytene, diplotene, diakinesis</b>.","Metaphase I: bivalents on equatorial plate. Anaphase I: homologues move to opposite poles <b>with both their chromatids</b>; each pole gets <b>half the chromosome number</b>.","Telophase I: nuclear membrane and nucleolus reappear. Meiosis II is <b>similar to mitosis</b>; in anaphase II <b>sister chromatids separate</b>.","At the end of meiosis, <b>four haploid cells</b> are formed."],"say":["Meiosis happens in diploid cells that will form gametes. It's the reduction division, and fertilisation restores the number.","In meiosis one, homologues pair into bivalents and cross over.","Prophase one has five stages: leptotene, zygotene, pachytene, diplotene and diakinesis.","Bivalents line up in metaphase one; in anaphase one, homologues move apart with both chromatids, so each pole gets half the chromosomes.","Meiosis two is like mitosis, and sister chromatids separate in anaphase two.","The end result: four haploid cells."]},{"kind":"qa","q":"Ex 1. What is the average cell cycle span for a mammalian cell?","a":["About <b>24 hours</b>, as in human cells in culture. (Yeast: about 90 minutes.)"]},{"kind":"qa","q":"Ex 2. Distinguish cytokinesis from karyokinesis.","a":["<b>Karyokinesis</b>: division of the <b>nucleus</b>; separation of daughter chromosomes into two daughter nuclei (prophase → telophase).","<b>Cytokinesis</b>: division of the <b>cytoplasm</b> into two daughter cells, by a furrow in animal cells and a cell plate in plant cells. It usually follows karyokinesis."]},{"kind":"qa","q":"Ex 3. Describe the events taking place during interphase.","a":["Interphase (> 95% of the cycle) prepares the cell for division through growth and DNA replication.","<b>G<sub>1</sub></b>: metabolically active, grows continuously, no DNA replication.","<b>S</b>: DNA replicates, 2C → 4C; chromosome number stays 2n; centriole duplicates in the cytoplasm of animal cells.","<b>G<sub>2</sub></b>: proteins synthesised for mitosis; growth continues."]},{"kind":"qa","q":"Ex 4. What is G0 (quiescent phase) of cell cycle?","a":["An inactive stage entered by cells that <b>exit G<sub>1</sub></b> and stop dividing (e.g. heart cells).","Cells stay <b>metabolically active</b> but <b>do not proliferate</b> unless called on to do so as the organism requires."]},{"kind":"qa","q":"Ex 5. Why is mitosis called equational division?","a":["Because the <b>number of chromosomes in the parent and progeny cells is the same</b>. A 2n cell gives two 2n daughter cells with identical genetic complement."]},{"kind":"qa","q":"Ex 6. Name the stage at which: (i) chromosomes move to spindle equator (ii) centromere splits, chromatids separate (iii) homologous chromosomes pair (iv) crossing over occurs.","a":["(i) <b>Metaphase</b> (metaphase I/II in meiosis).","(ii) <b>Anaphase</b> of mitosis (and anaphase II of meiosis).","(iii) <b>Zygotene</b> of prophase I.","(iv) <b>Pachytene</b> of prophase I."]},{"kind":"qa","q":"Ex 7. Describe (a) synapsis (b) bivalent (c) chiasmata, with a diagram.","a":["(a) <b>Synapsis</b>: pairing of homologous chromosomes during zygotene, with a synaptonemal complex.","(b) <b>Bivalent</b> (tetrad): the complex of a pair of synapsed homologous chromosomes; four chromatids.","(c) <b>Chiasmata</b>: X-shaped points where recombined homologues stay joined at crossover sites, seen from diplotene; terminalised in diakinesis. (See the animated diagrams in topic 7.)"]},{"kind":"qa","q":"Ex 8. How does cytokinesis in plant cells differ from that in animal cells?","a":["<b>Animal</b>: a furrow in the plasma membrane deepens and joins in the centre, dividing the cytoplasm.","<b>Plant</b>: the inextensible wall prevents furrowing; a <b>cell plate</b> (future middle lamella) forms in the centre and grows outward to meet the lateral walls."]},{"kind":"qa","q":"Ex 9. Find examples where the four daughter cells from meiosis are equal in size and where they are unequal.","a":["<b>Equal</b>: spermatogenesis (four equal sperms); microsporogenesis in anthers (four equal microspores, later pollen grains).","<b>Unequal</b>: oogenesis in humans (one large ovum + small polar bodies); megasporogenesis in most flowering plants (one functional megaspore, three degenerate). [Details from later chapters]"]},{"kind":"qa","q":"Ex 10. Distinguish anaphase of mitosis from anaphase I of meiosis.","a":["<b>Mitosis anaphase</b>: centromeres split; <b>sister chromatids</b> separate and move to opposite poles; chromosome number at each pole equals the parent's.","<b>Anaphase I</b>: centromeres do not split; <b>homologous chromosomes</b> separate with sister chromatids still joined; each pole gets <b>half</b> the chromosome number."]},{"kind":"qa","q":"Ex 11. List the main differences between mitosis and meiosis.","a":["<b>Where</b>: somatic (mostly diploid) cells vs diploid cells forming gametes.","<b>Divisions</b>: one vs two (one DNA replication). <b>Products</b>: two diploid, identical cells vs four haploid, varied cells.","<b>Pairing/crossing over</b>: absent vs synapsis + crossing over in prophase I. <b>Prophase</b>: short vs long with five substages.","<b>Anaphase</b>: sister chromatids separate vs homologues separate (AI). <b>Role</b>: growth, repair vs gametes, constant chromosome number, variation."]},{"kind":"qa","q":"Ex 12. What is the significance of meiosis?","a":["Conserves the <b>specific chromosome number</b> of a species across generations (halving then fertilisation).","Increases <b>genetic variability</b> from one generation to the next (crossing over, independent assortment); variations are important for <b>evolution</b>."]},{"kind":"qa","q":"Ex 13. Discuss (i) haploid insects and lower plants where cell division occurs, (ii) haploid cells in higher plants where cell division does not occur.","a":["(i) <b>Male honey bees</b> (drones; also male ants and wasps) develop from unfertilised eggs and grow by mitosis. Lower plants: haploid gametophytes of algae, mosses and fern prothalli divide by mitosis.","(ii) In flowering plants, haploid cells of the embryo sac such as the <b>egg cell, synergids and antipodals</b>, and the male gametes, do not divide further. [Beyond this chapter]"]},{"kind":"qa","q":"Ex 14. Can there be mitosis without DNA replication in ‘S’ phase?","a":["<b>No</b> (in a normal cell cycle). Each chromosome needs two chromatids to give one to each daughter; without S phase the daughters would get an incomplete genome. Cells check DNA replication before entering M phase."]},{"kind":"qa","q":"Ex 15. Can there be DNA replication without cell division?","a":["<b>Yes</b>. DNA can replicate repeatedly without division, giving <b>polyploid</b> cells or <b>polytene</b> chromosomes (e.g. salivary glands of <i>Drosophila</i>). A related case is the syncytium (nuclear division without cytokinesis). [Beyond NCERT examples]"]},{"kind":"points","title":"Ex 16. How N (chromosomes) and C (DNA) change","diagram":{"type":"nctable","rows":[["G<sub>1</sub>","2n","2C"],["S","2n","2C → 4C"],["G<sub>2</sub>","2n","4C"],["Prophase / Metaphase","2n","4C"],["Anaphase (per cell)","4n","4C"],["After telophase + cytokinesis","2n","2C"],["After meiosis I","n","2C"],["After meiosis II","n","C"]]},"points":[],"say":["Exercise sixteen asks how chromosome number N and DNA content C change through the cycle. In G one, a diploid cell is two n and two C. S phase doubles DNA to four C, but N stays two n. In anaphase, chromatids separate, so the cell briefly holds four n. After cytokinesis, each daughter is back to two n and two C. In meiosis, meiosis one gives n with two C, and meiosis two gives n with C."]}]}],"mcq":[{"q":"Human cells in culture divide approximately once every","o":["12 hours","90 minutes","24 hours","1 hour"],"a":2,"why":"NCERT 10.1.1: about 24 hours."},{"q":"Yeast can complete its cell cycle in about","o":["90 minutes","24 hours","10 minutes","6 hours"],"a":0,"why":"NCERT: only about 90 minutes."},{"q":"In a 24-hour human cell cycle, interphase lasts","o":["About 50% of the cycle","About 1 hour","About 5% of the cycle","More than 95% of the cycle"],"a":3,"why":"Division proper lasts about an hour; interphase is more than 95%."},{"q":"DNA replication takes place during","o":["G<sub>1</sub> phase","S phase","G<sub>2</sub> phase","M phase"],"a":1,"why":"S (synthesis) phase."},{"q":"If DNA content at G<sub>1</sub> is 2C, after S phase it is","o":["4C","1C","2C","8C"],"a":0,"why":"DNA doubles in S phase: 2C → 4C."},{"q":"A cell with 2n chromosomes at G<sub>1</sub> has how many chromosomes after S phase?","o":["4n","n","2n","3n"],"a":2,"why":"No increase in chromosome number during S phase."},{"q":"In animal cells, the centriole duplicates during","o":["G<sub>1</sub> phase","S phase","Prophase","Telophase"],"a":1,"why":"S phase, in the cytoplasm."},{"q":"Cells that exit G<sub>1</sub> and stop dividing enter","o":["G<sub>2</sub>","S phase","Interkinesis","G<sub>0</sub> (quiescent stage)"],"a":3,"why":"Quiescent stage G<sub>0</sub>; still metabolically active."},{"q":"Haploid cells divide by mitosis in","o":["Human liver","Cow intestine","Frog skin","Male honey bees"],"a":3,"why":"NCERT exception in animals: male honey bees."},{"q":"Morphology of chromosomes is most easily studied at","o":["Prophase","Metaphase","Anaphase","Telophase"],"a":1,"why":"Condensation is complete at metaphase."},{"q":"Small disc-shaped structures at the surface of centromeres are","o":["Asters","Centrioles","Kinetochores","Nucleosomes"],"a":2,"why":"Kinetochores: sites of spindle fibre attachment."},{"q":"Two asters together with spindle fibres form the","o":["Mitotic apparatus","Synaptonemal complex","Cell plate","Metaphase plate"],"a":0,"why":"NCERT 10.2.1."},{"q":"Centromeres split and chromatids separate during","o":["Metaphase","Anaphase","Telophase","Prophase"],"a":1,"why":"Key event of anaphase."},{"q":"Nucleolus, Golgi complex and ER reform during","o":["Prophase","Metaphase","Anaphase","Telophase"],"a":3,"why":"Key event of telophase."},{"q":"The liquid endosperm of coconut is an example of","o":["Syncytium","Cell plate","Dyad","Bivalent"],"a":0,"why":"Karyokinesis not followed by cytokinesis."},{"q":"Synapsis of homologous chromosomes occurs in","o":["Leptotene","Pachytene","Zygotene","Diakinesis"],"a":2,"why":"Zygotene, with the synaptonemal complex."},{"q":"The enzyme involved in crossing over is","o":["Recombinase","Helicase","Ligase","Polymerase"],"a":0,"why":"NCERT: crossing over is enzyme-mediated by recombinase."},{"q":"Terminalisation of chiasmata is seen in","o":["Zygotene","Pachytene","Diplotene","Diakinesis"],"a":3,"why":"Diakinesis; chiasmata first appear in diplotene."},{"q":"Homologous chromosomes separate during","o":["Anaphase of mitosis","Anaphase II","Anaphase I","Metaphase II"],"a":2,"why":"Sister chromatids stay joined in anaphase I."},{"q":"The short stage between meiosis I and meiosis II, with no DNA replication, is","o":["Interphase","Interkinesis","Diakinesis","G<sub>0</sub>"],"a":1,"why":"Interkinesis is short-lived; no DNA replication."}],"glossary":[["Cell cycle","Sequence of events by which a cell duplicates its genome, synthesises other constituents and divides into two daughter cells."],["Interphase","Phase between two successive M phases; > 95% of the cycle; G1, S, G2."],["M phase","Mitosis phase, when actual cell division occurs (about 1 hour of 24)."],["G1 phase","Gap 1: cell metabolically active and growing; no DNA replication."],["S phase","Synthesis: DNA replicates (2C → 4C); chromosome number unchanged; centriole duplicates in animal cells."],["G2 phase","Gap 2: proteins synthesised for mitosis; growth continues."],["G0 (quiescent stage)","Inactive stage after exiting G1; metabolically active but not proliferating (e.g. heart cells)."],["Karyokinesis","Division of the nucleus; separation of daughter chromosomes."],["Cytokinesis","Division of the cytoplasm into two daughter cells."],["Equational division","Mitosis: parent and progeny cells have the same chromosome number."],["Asters","Microtubules radiating from each centrosome."],["Mitotic apparatus","Two asters together with spindle fibres."],["Kinetochore","Small disc-shaped structure on the centromere surface where spindle fibres attach."],["Metaphase plate","Plane of alignment of chromosomes at metaphase."],["Cell plate","Precursor of the new wall in plant cytokinesis; represents the middle lamella."],["Syncytium","Multinucleate condition when karyokinesis is not followed by cytokinesis (liquid endosperm of coconut)."],["Meiosis","Reduction division forming haploid cells; two divisions, one DNA replication."],["Synapsis","Pairing of homologous chromosomes in zygotene."],["Synaptonemal complex","Complex structure accompanying synapsis."],["Bivalent / tetrad","A pair of synapsed homologous chromosomes (four chromatids)."],["Recombination nodules","Sites of crossing over in pachytene."],["Crossing over","Exchange of genetic material between non-sister chromatids of homologous chromosomes; enzyme recombinase."],["Chiasmata","X-shaped structures at crossover sites, seen in diplotene."],["Terminalisation","Movement of chiasmata to chromosome ends in diakinesis."],["Dyad","The two cells formed after telophase I and cytokinesis."],["Interkinesis","Short stage between meiosis I and II; no DNA replication."],["Tetrad of cells","Four haploid daughter cells at the end of meiosis II."]],"drills":[{"name":"Mitosis stages","order":["Prophase","Metaphase","Anaphase","Telophase","Cytokinesis"]},{"name":"Prophase I substages","order":["Leptotene","Zygotene","Pachytene","Diplotene","Diakinesis"]},{"name":"Cell cycle phases","order":["G1","S","G2","M phase"]},{"name":"Whole of meiosis","order":["Prophase I","Metaphase I","Anaphase I","Telophase I","Interkinesis","Prophase II","Metaphase II","Anaphase II","Telophase II"]}],"ncQuiz":[["G1","2n","2C"],["After S","2n","4C"],["G2","2n","4C"],["Metaphase","2n","4C"],["After mitosis (each cell)","2n","2C"],["After meiosis I (each cell)","n","2C"],["After meiosis II (each cell)","n","C"]]};
+// Animated biology diagrams as SVG strings. No dependencies; runs in Node or a browser.
+// drawScene(scene, fromState, toState, t) → SVG markup, tweening numeric fields from → to.
+// Scenes: "cell" (mitosis + meiosis engine), "wheel" (cell cycle), "graph" (DNA content).
+
+const W = 600, H = 440, CX = 300, CY = 212;
+const COL = { ink: "#12261E", muted: "#4A5E55", line: "#B9C7BC", cell: "#F7FAF5", cyto: "#E6F0E9", nuc: "#FFFFFF", spindle: "#7B8F86", plate: "#C08A00", accent: "#1C6B58", tag: "#F3CF5A" };
+// 2n = 4: chromosome 0/1 = long homologues, 2/3 = short homologues. Blue = maternal, red = paternal.
+const CHROM = [
+  { len: 78, col: "#2B5FA8" },
+  { len: 78, col: "#C0394B" },
+  { len: 50, col: "#6FA0DD" },
+  { len: 50, col: "#E58A97" },
+];
+const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+const lerp = (a, b, t) => a + (b - a) * t;
+const r1 = (v) => Math.round(v * 10) / 10;
+
+/* ───────────────────────── state builders (cell scene) ───────────────────────── */
+// A state: { cells[5], nuclei[4], centro[4], chromatids[8], fibre, plate[2], sc, chiasma, cond, chromatin, nucleolus, label, tags[] }
+const offCell = { x: CX, y: CY, rx: 10, ry: 10, furrow: 0, op: 0, rect: 0, cellPlate: 0 };
+const offNuc = { x: CX, y: CY, r: 10, env: 0, chromatin: 0, nucleolus: 0, op: 0 };
+const offCen = { x: CX, y: CY, op: 0, aster: 0 };
+
+function base() {
+  return {
+    cells: [{ x: CX, y: CY, rx: 250, ry: 172, furrow: 0, op: 1, rect: 0, cellPlate: 0 }, offCell, offCell, offCell, offCell],
+    nuclei: [{ x: CX, y: CY, r: 104, env: 1, chromatin: 1, nucleolus: 1, op: 1 }, offNuc, offNuc, offNuc],
+    centro: [{ x: CX - 14, y: 70, op: 1, aster: 0 }, { x: CX + 14, y: 70, op: 1, aster: 0 }, offCen, offCen],
+    chromatids: [],
+    fibre: 0, // spindle fibre opacity
+    plates: [{ x1: CX, y1: 60, x2: CX, y2: 364, op: 0 }, { x1: 0, y1: 0, x2: 0, y2: 0, op: 0 }],
+    sc: 0, nodule: 0, chiasma: 0, chiasmaPos: 0.62,
+    label: "", tags: [],
+  };
+}
+// chromatid: {x, y, a(deg), len, b(bend px), w(width), op, col, col2, swap(0..1 tip fraction), pole}
+function cd(k, s, x, y, a, o = {}) {
+  return { x, y, a, len: CHROM[k].len * (o.lenK ?? 1), b: o.b ?? 0, w: o.w ?? 13, op: o.op ?? 1, col: CHROM[k].col, col2: o.col2 ?? CHROM[k].col, swap: o.swap ?? 0, pole: o.pole ?? s, k, s };
+}
+// Interphase-like scatter inside the nucleus (sisters overlapping).
+const SCATTER = [[262, 176, 25], [336, 170, -35], [270, 254, 70], [336, 252, -12]];
+function scatter(gap, w, op, lenK = 1) {
+  const out = [];
+  for (let k = 0; k < 4; k++) for (let s = 0; s < 2; s++) {
+    const [x, y, a] = SCATTER[k];
+    const rad = ((a + 90) * Math.PI) / 180;
+    const d = (s ? 1 : -1) * gap;
+    out.push(cd(k, s, x + Math.cos(rad) * d, y + Math.sin(rad) * d, a, { w, op, lenK }));
+  }
+  return out;
+}
+// Metaphase: vertical stack on the plate, sisters either side.
+const STACK_Y = [108, 184, 252, 306];
+function plateLine(gap, xo = CX) {
+  const out = [];
+  for (let k = 0; k < 4; k++) for (let s = 0; s < 2; s++) out.push(cd(k, s, xo + (s ? gap : -gap), STACK_Y[k], 90, { lenK: 0.82 }));
+  return out;
+}
+function toPoles(dx, bend, w = 13, op = 1) {
+  const out = [];
+  for (let k = 0; k < 4; k++) for (let s = 0; s < 2; s++) out.push(cd(k, s, CX + (s ? dx : -dx), lerp(STACK_Y[k], CY, 0.35), 90, { lenK: 0.78, b: (s ? 1 : -1) * bend, w, op }));
+  return out;
+}
+const poles = (st, dx = 228, op = 1, aster = 1) => { st.centro = [{ x: CX - dx, y: CY, op, aster }, { x: CX + dx, y: CY, op, aster }, offCen, offCen]; };
+
+const S = {};
+S.interphase = (() => { const st = base(); st.chromatids = scatter(0, 4, 0); st.label = "Interphase"; st.tags = [{ x: 300, y: 110, t: "nucleus" }, { x: 330, y: 218, t: "chromatin" }]; return st; })();
+S["prophase-early"] = (() => {
+  const st = base(); st.chromatids = scatter(4, 8, 0.75, 1.15);
+  st.nuclei[0] = { ...st.nuclei[0], chromatin: 0.35, nucleolus: 0.6 };
+  st.centro = [{ x: CX - 90, y: 74, op: 1, aster: 0.6 }, { x: CX + 90, y: 74, op: 1, aster: 0.6 }, offCen, offCen];
+  st.label = "Early prophase"; st.tags = [{ x: 210, y: 52, t: "centrosomes move apart" }]; return st;
+})();
+S["prophase-late"] = (() => {
+  const st = base(); st.chromatids = scatter(6, 13, 1);
+  st.nuclei[0] = { ...st.nuclei[0], env: 0.25, chromatin: 0, nucleolus: 0 };
+  poles(st, 205, 1, 1); st.fibre = 0.35;
+  st.label = "Late prophase"; st.tags = [{ x: 96, y: 170, t: "aster" }, { x: 300, y: 118, t: "two chromatids + centromere" }]; return st;
+})();
+S.metaphase = (() => {
+  const st = base(); st.chromatids = plateLine(7);
+  st.nuclei[0] = { ...st.nuclei[0], env: 0, chromatin: 0, nucleolus: 0, op: 0 };
+  poles(st); st.fibre = 1; st.plates[0].op = 1;
+  st.label = "Metaphase"; st.tags = [{ x: 300, y: 48, t: "metaphase plate" }, { x: 96, y: 170, t: "aster" }, { x: 452, y: 330, t: "kinetochore + spindle fibre" }]; return st;
+})();
+S["anaphase-early"] = (() => {
+  const st = base(); st.chromatids = toPoles(60, 16);
+  st.nuclei[0] = { ...offNuc }; poles(st); st.fibre = 1; st.plates[0].op = 0.35;
+  st.label = "Anaphase"; st.tags = [{ x: 300, y: 48, t: "centromeres split" }]; return st;
+})();
+S["anaphase-late"] = (() => {
+  const st = base(); st.chromatids = toPoles(150, 22);
+  st.nuclei[0] = { ...offNuc }; poles(st); st.fibre = 0.9; st.plates[0].op = 0;
+  st.label = "Late anaphase"; st.tags = [{ x: 300, y: 48, t: "centromere leads, arms trail" }]; return st;
+})();
+function telo(st, furrow) {
+  st.chromatids = toPoles(165, 6, 6, 0.4);
+  st.chromatids.forEach((c) => { c.len *= 0.62; c.y = lerp(c.y, CY, 0.55); });
+  st.nuclei = [{ x: CX - 165, y: CY, r: 66, env: 1, chromatin: 0.8, nucleolus: 1, op: 1 }, { x: CX + 165, y: CY, r: 66, env: 1, chromatin: 0.8, nucleolus: 1, op: 1 }, offNuc, offNuc];
+  poles(st, 238, 0.5, 0.2); st.fibre = 0.1; st.cells[0].furrow = furrow;
+}
+S.telophase = (() => { const st = base(); telo(st, 0.28); st.label = "Telophase"; st.tags = [{ x: 135, y: 128, t: "nuclear envelope reforms" }, { x: 420, y: 300, t: "nucleolus reappears" }]; return st; })();
+S["cyto-animal-mid"] = (() => { const st = base(); telo(st, 0.7); st.chromatids.forEach((c) => (c.op = 0.15)); st.label = "Cytokinesis (animal)"; st.tags = [{ x: 300, y: 60, t: "furrow deepens" }]; return st; })();
+S["cyto-animal"] = (() => {
+  const st = base(); telo(st, 1); st.chromatids.forEach((c) => (c.op = 0)); st.nuclei.forEach((n) => (n.chromatin = n.op));
+  st.centro = [{ x: CX - 165, y: 120, op: 1, aster: 0 }, { x: CX + 165, y: 120, op: 1, aster: 0 }, offCen, offCen];
+  st.label = "Two daughter cells"; st.tags = [{ x: 300, y: 60, t: "furrow meets in the centre" }]; return st;
+})();
+function plant(st, plate) {
+  telo(st, 0); st.cells[0] = { ...st.cells[0], rect: 1, cellPlate: plate };
+  st.centro = [offCen, offCen, offCen, offCen];
+  st.chromatids.forEach((c) => (c.op = plate > 0 ? 0.12 : 0.45));
+}
+S["plant-telophase"] = (() => { const st = base(); plant(st, 0); st.label = "Plant cell · telophase"; st.tags = [{ x: 300, y: 32, t: "rigid cell wall" }]; return st; })();
+S["plant-plate"] = (() => { const st = base(); plant(st, 0.45); st.label = "Cell plate grows from centre"; st.tags = [{ x: 300, y: 32, t: "cell plate: centre → outward" }]; return st; })();
+S["plant-done"] = (() => { const st = base(); plant(st, 1); st.chromatids.forEach((c) => (c.op = 0)); st.label = "New wall complete"; st.tags = [{ x: 300, y: 32, t: "middle lamella" }]; return st; })();
+S.syncytium4 = (() => {
+  const st = base(); st.chromatids = scatter(0, 4, 0);
+  st.nuclei = [[205, 150], [395, 150], [205, 278], [395, 278]].map(([x, y]) => ({ x, y, r: 52, env: 1, chromatin: 1, nucleolus: 1, op: 1 }));
+  st.centro = [offCen, offCen, offCen, offCen];
+  st.label = "Syncytium: many nuclei, one cell"; st.tags = [{ x: 300, y: 32, t: "karyokinesis without cytokinesis" }]; return st;
+})();
+
+// ── Meiosis ──
+// Pair positions in the nucleus during prophase I: homologue k at x offset; sisters ±sg.
+function bivalents(hg, sg, w, op, cx = [258, 350], cy = [204, 222], angle = 86) {
+  const out = [];
+  for (let k = 0; k < 4; k++) for (let s = 0; s < 2; s++) {
+    const pair = k >> 1, side = k & 1 ? 1 : -1;
+    const x = cx[pair] + side * hg + (s ? sg : -sg), y = cy[pair];
+    out.push(cd(k, s, x, y, angle, { w: w * 1.2, op, lenK: 1.55 }));
+  }
+  return out;
+}
+const crossover = (arr) => arr.forEach((c) => {
+  // inner non-sister chromatids exchange tips: k even/s=1 with k odd/s=0
+  if ((c.k % 2 === 0 && c.s === 1) || (c.k % 2 === 1 && c.s === 0)) { c.col2 = CHROM[c.k ^ 1].col; c.swap = 0.38; }
+});
+S.leptotene = (() => { const st = base(); st.chromatids = scatter(2, 6, 0.85, 1.15); st.nuclei[0].chromatin = 0.3; st.label = "Leptotene"; st.tags = [{ x: 300, y: 92, t: "chromosomes become visible" }]; return st; })();
+S.zygotene = (() => { const st = base(); st.chromatids = bivalents(9, 2, 7, 0.95); st.nuclei[0].chromatin = 0; st.sc = 1; st.label = "Zygotene · synapsis"; st.tags = [{ x: 300, y: 92, t: "homologues pair (synaptonemal complex)" }]; return st; })();
+S.pachytene = (() => { const st = base(); st.chromatids = bivalents(13, 5, 9, 1); st.nuclei[0].chromatin = 0; st.sc = 0.6; st.nodule = 1; st.label = "Pachytene · tetrad"; st.tags = [{ x: 300, y: 92, t: "4 chromatids · recombination nodules" }]; return st; })();
+S["pachytene-x"] = (() => { const st = S.pachytene; const s2 = JSON.parse(JSON.stringify(st)); crossover(s2.chromatids); s2.label = "Pachytene · crossing over"; s2.tags = [{ x: 300, y: 92, t: "non-sister chromatids exchange segments" }]; return s2; })();
+S.diplotene = (() => { const st = base(); st.chromatids = bivalents(24, 5, 10, 1); crossover(st.chromatids); st.nuclei[0].chromatin = 0; st.nuclei[0].nucleolus = 0.7; st.chiasma = 1; st.label = "Diplotene · chiasmata"; st.tags = [{ x: 300, y: 92, t: "X-shaped chiasmata hold homologues" }]; return st; })();
+S.diakinesis = (() => {
+  const st = base(); st.chromatids = bivalents(22, 6, 11, 1); crossover(st.chromatids);
+  st.nuclei[0] = { ...st.nuclei[0], env: 0.2, chromatin: 0, nucleolus: 0 }; st.chiasma = 1; st.chiasmaPos = 0.95;
+  poles(st, 205, 1, 0.8); st.fibre = 0.3;
+  st.label = "Diakinesis · terminalisation"; st.tags = [{ x: 300, y: 92, t: "chiasmata move to the ends" }]; return st;
+})();
+function mI(gap) {
+  const out = [];
+  const Y = [124, 124, 286, 286];
+  for (let k = 0; k < 4; k++) for (let s = 0; s < 2; s++) {
+    // pair B lands the other way round (independent assortment): red left, blue right
+    const side = k === 0 || k === 3 ? -1 : 1;
+    out.push(cd(k, s, CX + side * gap + (s ? 5 : -5), Y[k], 90, { w: 12, pole: side < 0 ? 0 : 1 }));
+  }
+  crossover(out); return out;
+}
+S["metaphase-1"] = (() => { const st = base(); st.chromatids = mI(15); st.nuclei[0] = { ...offNuc }; poles(st); st.fibre = 1; st.plates[0].op = 1; st.label = "Metaphase I"; st.tags = [{ x: 300, y: 48, t: "bivalents on the equatorial plate" }]; return st; })();
+S["anaphase-1"] = (() => {
+  const st = base(); st.chromatids = mI(150); st.chromatids.forEach((c) => { c.b = (c.pole ? 1 : -1) * 14; c.y = lerp(c.y, CY, 0.3); });
+  st.nuclei[0] = { ...offNuc }; poles(st); st.fibre = 0.9; st.label = "Anaphase I";
+  st.tags = [{ x: 300, y: 48, t: "homologues separate; sisters stay joined" }]; return st;
+})();
+S["telophase-1"] = (() => {
+  const st = base(); st.chromatids = mI(165); st.chromatids.forEach((c) => { c.y = lerp(c.y, CY, 0.62); c.len *= 0.6; c.op = 0.8; c.w = 9; c.x += (c.pole ? -1 : 1) * 0; });
+  st.nuclei = [{ x: CX - 165, y: CY, r: 70, env: 1, chromatin: 0, nucleolus: 1, op: 1 }, { x: CX + 165, y: CY, r: 70, env: 1, chromatin: 0, nucleolus: 1, op: 1 }, offNuc, offNuc];
+  poles(st, 238, 0.4, 0); st.fibre = 0; st.cells[0].furrow = 0.4; st.label = "Telophase I"; st.tags = [{ x: 300, y: 48, t: "each pole gets half the chromosomes" }]; return st;
+})();
+S.dyad = (() => { const st = JSON.parse(JSON.stringify(S["telophase-1"])); st.cells[0].furrow = 1; st.label = "Dyad · interkinesis"; st.tags = [{ x: 300, y: 48, t: "no DNA replication in interkinesis" }]; return st; })();
+// Meiosis II: two cells, vertical spindles, chromosomes horizontal.
+const MII = [165, 435];
+function mII(phase) {
+  const out = [];
+  // left cell keeps chromosomes 0 (blue long) & 3 (red short); right keeps 1 & 2 (from mI sides)
+  const owner = [0, 1, 1, 0];
+  const slot = [-1, -1, 1, 1];
+  for (let k = 0; k < 4; k++) for (let s = 0; s < 2; s++) {
+    const cx = MII[owner[k]] + slot[k] * 40;
+    let c;
+    if (phase === "P") c = cd(k, s, cx, CY + (s ? 6 : -6) + (k % 2 ? 18 : -18), 20 * slot[k], { w: 12 });
+    if (phase === "M") c = cd(k, s, cx, CY + (s ? 6 : -6), 0, { w: 12, lenK: 0.8, pole: owner[k] * 2 + s });
+    if (phase === "A") c = cd(k, s, cx, CY + (s ? 88 : -88), 0, { w: 11, lenK: 0.72, b: (s ? 1 : -1) * 12, pole: owner[k] * 2 + s });
+    if (phase === "T") c = cd(k, s, cx * 0.85 + MII[owner[k]] * 0.15, CY + (s ? 92 : -92), 0, { w: 6, lenK: 0.5, op: 0.4 });
+    out.push(c);
+  }
+  crossover(out); return out;
+}
+function twoCells(st) {
+  st.cells = [{ ...st.cells[0], op: 0 }, { x: MII[0], y: CY, rx: 128, ry: 168, furrow: 0, op: 1, rect: 0, cellPlate: 0 }, { x: MII[1], y: CY, rx: 128, ry: 168, furrow: 0, op: 1, rect: 0, cellPlate: 0 }, offCell, offCell];
+}
+S["prophase-2"] = (() => { const st = base(); twoCells(st); st.chromatids = mII("P"); st.nuclei = [offNuc, offNuc, offNuc, offNuc]; st.centro = MII.map((x) => ({ x, y: 70, op: 1, aster: 0.5 })).concat([offCen, offCen]); st.label = "Prophase II"; st.tags = [{ x: 300, y: 30, t: "nuclear membrane disappears" }]; return st; })();
+S["metaphase-2"] = (() => {
+  const st = base(); twoCells(st); st.chromatids = mII("M"); st.nuclei = [offNuc, offNuc, offNuc, offNuc];
+  st.centro = [{ x: MII[0], y: 58, op: 1, aster: 1 }, { x: MII[0], y: 366, op: 1, aster: 1 }, { x: MII[1], y: 58, op: 1, aster: 1 }, { x: MII[1], y: 366, op: 1, aster: 1 }];
+  st.fibre = 1; st.plates = [{ x1: 50, y1: CY, x2: 280, y2: CY, op: 1 }, { x1: 320, y1: CY, x2: 550, y2: CY, op: 1 }];
+  st.label = "Metaphase II"; st.tags = [{ x: 300, y: 30, t: "chromosomes at the equator of each cell" }]; return st;
+})();
+S["anaphase-2"] = (() => { const st = JSON.parse(JSON.stringify(S["metaphase-2"])); st.chromatids = mII("A"); st.plates.forEach((p) => (p.op = 0.2)); st.label = "Anaphase II"; st.tags = [{ x: 300, y: 30, t: "centromeres split; sisters separate" }]; return st; })();
+S["telophase-2"] = (() => {
+  const st = base(); st.chromatids = mII("T");
+  const Q = [[165, 118], [165, 306], [435, 118], [435, 306]];
+  st.cells = [{ ...offCell }].concat(Q.map(([x, y]) => ({ x, y, rx: 122, ry: 88, furrow: 0, op: 1, rect: 0, cellPlate: 0 })));
+  st.nuclei = Q.map(([x, y]) => ({ x, y, r: 40, env: 1, chromatin: 0.9, nucleolus: 1, op: 1 }));
+  st.centro = [offCen, offCen, offCen, offCen];
+  st.label = "Telophase II · tetrad of cells"; st.tags = [{ x: 300, y: 214, t: "4 haploid cells" }]; return st;
+})();
+
+/* ───────────────────────── interpolation ───────────────────────── */
+function mix(a, b, t) {
+  if (typeof a === "number" && typeof b === "number") return lerp(a, b, t);
+  if (Array.isArray(a) && Array.isArray(b)) return b.map((v, i) => (i < a.length ? mix(a[i], v, t) : v));
+  if (a && b && typeof a === "object") { const o = {}; for (const k in b) o[k] = k in a ? mix(a[k], b[k], t) : b[k]; return o; }
+  return t < 0.5 ? a : b;
+}
+function mixColor(c1, c2, t) {
+  if (c1 === c2) return c2;
+  const p = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+  const [a, b] = [p(c1), p(c2)];
+  return "#" + a.map((v, i) => Math.round(lerp(v, b[i], t)).toString(16).padStart(2, "0")).join("");
+}
+
+/* ───────────────────────── drawing (cell scene) ───────────────────────── */
+function cellPath(c) {
+  if (c.rect > 0.5) return `<rect x="${c.x - c.rx}" y="${c.y - c.ry}" width="${c.rx * 2}" height="${c.ry * 2}" rx="10" fill="${COL.cyto}" stroke="#5E7A55" stroke-width="9"/>`;
+  const pts = [];
+  for (let i = 0; i < 96; i++) {
+    const th = (i / 96) * Math.PI * 2;
+    const x = c.x + c.rx * Math.cos(th);
+    let y = c.y + c.ry * Math.sin(th);
+    const pinch = c.furrow * Math.exp(-Math.pow((x - c.x) / (c.rx * 0.28), 2));
+    y = c.y + (y - c.y) * (1 - pinch * 0.985);
+    pts.push(`${r1(x)},${r1(y)}`);
+  }
+  return `<polygon points="${pts.join(" ")}" fill="${COL.cyto}" stroke="${COL.ink}" stroke-width="3" stroke-linejoin="round" opacity="${r1(c.op)}"/>`;
+}
+function chromatidPath(c, t2) {
+  const rad = (c.a * Math.PI) / 180, dx = Math.cos(rad) * c.len / 2, dy = Math.sin(rad) * c.len / 2;
+  const nx = -Math.sin(rad), ny = Math.cos(rad);
+  const p0 = [c.x - dx, c.y - dy], p2 = [c.x + dx, c.y + dy], p1 = [c.x + nx * c.b * 2, c.y + ny * c.b * 2];
+  const at = (t) => [(1 - t) ** 2 * p0[0] + 2 * (1 - t) * t * p1[0] + t * t * p2[0], (1 - t) ** 2 * p0[1] + 2 * (1 - t) * t * p1[1] + t * t * p2[1]];
+  const seg = (t0, t1) => { const pts = []; for (let i = 0; i <= 10; i++) pts.push(at(lerp(t0, t1, i / 10)).map(r1).join(",")); return pts.join(" "); };
+  const w = r1(c.w);
+  const split = 1 - c.swap;
+  let s = `<polyline points="${seg(0, c.swap > 0.01 ? split : 1)}" fill="none" stroke="${c.col}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  if (c.swap > 0.01) s += `<polyline points="${seg(split, 1)}" fill="none" stroke="${c.col2}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const mid = at(0.5);
+  return { svg: `<g opacity="${r1(c.op)}">${s}</g>`, mid, at };
+}
+function drawCell(st) {
+  let svg = "";
+  st.cells.forEach((c) => { if (c.op > 0.02) svg += `<g opacity="${r1(c.op)}">${cellPath(c)}</g>`; });
+  // cell plate
+  st.cells.forEach((c) => {
+    if (c.rect > 0.5 && c.cellPlate > 0.01) {
+      const h = c.ry * c.cellPlate;
+      svg += `<line x1="${c.x}" y1="${r1(c.y - h)}" x2="${c.x}" y2="${r1(c.y + h)}" stroke="#5E7A55" stroke-width="${r1(4 + 5 * c.cellPlate)}" stroke-linecap="round"/>`;
+      if (c.cellPlate < 0.98) svg += `<g fill="#8FB07F">${[-1, 1].map((d) => `<circle cx="${c.x}" cy="${r1(c.y + d * (h + 10))}" r="5"/>`).join("")}</g>`;
+    }
+  });
+  // nuclei
+  st.nuclei.forEach((n, i) => {
+    if (n.op < 0.02) return;
+    svg += `<g opacity="${r1(n.op)}">`;
+    if (n.env > 0.02) svg += `<circle cx="${r1(n.x)}" cy="${r1(n.y)}" r="${r1(n.r)}" fill="${COL.nuc}" fill-opacity="${r1(0.75 * n.env)}" stroke="${COL.muted}" stroke-width="3" stroke-dasharray="${n.env < 0.6 ? "6 9" : "none"}" opacity="${r1(Math.min(1, n.env * 1.3))}"/>`;
+    if (n.chromatin > 0.02) {
+      const s = n.r / 104;
+      svg += `<path d="M${-60 * s},${-20 * s} q${15 * s},${-30 * s} ${30 * s},0 t${30 * s},0 t${30 * s},0 t${30 * s},0 M${-55 * s},${25 * s} q${12 * s},${25 * s} ${25 * s},0 t${25 * s},0 t${25 * s},0 t${25 * s},0 M${-20 * s},${-55 * s} q${-25 * s},${15 * s} 0,${30 * s} t0,${30 * s}" transform="translate(${r1(n.x)},${r1(n.y)})" fill="none" stroke="#7A6CB0" stroke-width="2.5" opacity="${r1(n.chromatin)}"/>`;
+    }
+    if (n.nucleolus > 0.02) svg += `<circle cx="${r1(n.x + n.r * 0.38)}" cy="${r1(n.y + n.r * 0.32)}" r="${r1(n.r * 0.17)}" fill="#3D5249" opacity="${r1(n.nucleolus)}"/>`;
+    svg += `</g>`;
+  });
+  // plates
+  st.plates.forEach((p) => { if (p.op > 0.02) svg += `<line x1="${r1(p.x1)}" y1="${r1(p.y1)}" x2="${r1(p.x2)}" y2="${r1(p.y2)}" stroke="${COL.plate}" stroke-width="3" stroke-dasharray="10 8" opacity="${r1(p.op)}"/>`; });
+  // chromatids (geometry first, for fibres)
+  const geo = st.chromatids.map((c) => chromatidPath(c));
+  // spindle fibres
+  if (st.fibre > 0.02) {
+    let f = "";
+    st.chromatids.forEach((c, i) => {
+      const p = st.centro[c.pole] || st.centro[0];
+      if (!p || p.op < 0.1 || c.op < 0.1) return;
+      const [mx, my] = geo[i].mid;
+      f += `<line x1="${r1(p.x)}" y1="${r1(p.y)}" x2="${r1(mx)}" y2="${r1(my)}"/>`;
+    });
+    for (let i = 0; i + 1 < st.centro.length; i += 2) {
+      const a = st.centro[i], b = st.centro[i + 1];
+      if (a.op > 0.1 && b.op > 0.1) [-30, 30].forEach((o) => {
+        const vert = Math.abs(a.x - b.x) < Math.abs(a.y - b.y);
+        const mx = (a.x + b.x) / 2 + (vert ? o * 1.6 : 0), my = (a.y + b.y) / 2 + (vert ? 0 : o * 2.6);
+        f += `<path d="M${r1(a.x)},${r1(a.y)} Q${r1(mx)},${r1(my)} ${r1(b.x)},${r1(b.y)}" fill="none"/>`;
+      });
+    }
+    svg += `<g stroke="${COL.spindle}" stroke-width="1.6" opacity="${r1(st.fibre * 0.85)}">${f}</g>`;
+  }
+  // centrosomes + asters
+  st.centro.forEach((c) => {
+    if (c.op < 0.02) return;
+    let rays = "";
+    if (c.aster > 0.02) for (let i = 0; i < 14; i++) { const th = (i / 14) * Math.PI * 2; rays += `<line x1="${r1(c.x)}" y1="${r1(c.y)}" x2="${r1(c.x + Math.cos(th) * 30 * c.aster)}" y2="${r1(c.y + Math.sin(th) * 30 * c.aster)}"/>`; }
+    svg += `<g opacity="${r1(c.op)}"><g stroke="${COL.spindle}" stroke-width="1.6">${rays}</g><circle cx="${r1(c.x)}" cy="${r1(c.y)}" r="7" fill="${COL.accent}"/></g>`;
+  });
+  // synaptonemal complex rungs between homologues 0-1 and 2-3
+  if (st.sc > 0.02) {
+    let r = "";
+    [[0, 2], [4, 6]].forEach(([i, j]) => {
+      const A = geo[i + 1], B = geo[j];
+      for (let q = 1; q < 8; q++) { const a = A.at(q / 8), b = B.at(q / 8); r += `<line x1="${r1(a[0])}" y1="${r1(a[1])}" x2="${r1(b[0])}" y2="${r1(b[1])}"/>`; }
+    });
+    svg += `<g stroke="#9A8A3A" stroke-width="2" opacity="${r1(st.sc)}">${r}</g>`;
+  }
+  svg += geo.map((g) => g.svg).join("");
+  // kinetochores / centromeres
+  st.chromatids.forEach((c, i) => { if (c.op > 0.3 && c.w > 7) { const [mx, my] = geo[i].mid; svg += `<circle cx="${r1(mx)}" cy="${r1(my)}" r="${r1(c.w * 0.33)}" fill="${COL.ink}" opacity="${r1(c.op)}"/>`; } });
+  // recombination nodules
+  if (st.nodule > 0.02) [[2, 3], [6, 7]].forEach(([i, j]) => {
+    const p = geo[i - 1].at(0.75), q = geo[i].at(0.75);
+    svg += `<circle cx="${r1((p[0] + q[0]) / 2 + 9)}" cy="${r1((p[1] + q[1]) / 2)}" r="7" fill="${COL.tag}" stroke="${COL.ink}" stroke-width="1.5" opacity="${r1(st.nodule)}"/>`;
+  });
+  // chiasmata: X between inner non-sister chromatids
+  if (st.chiasma > 0.02) [[1, 2], [5, 6]].forEach(([i, j]) => {
+    const a = geo[i].at(st.chiasmaPos), b = geo[j].at(st.chiasmaPos), a2 = geo[i].at(st.chiasmaPos - 0.12), b2 = geo[j].at(st.chiasmaPos - 0.12);
+    svg += `<g stroke="${COL.ink}" stroke-width="3" stroke-linecap="round" opacity="${r1(st.chiasma)}"><line x1="${r1(a2[0])}" y1="${r1(a2[1])}" x2="${r1(b[0])}" y2="${r1(b[1])}"/><line x1="${r1(b2[0])}" y1="${r1(b2[1])}" x2="${r1(a[0])}" y2="${r1(a[1])}"/></g>`;
+  });
+  return svg;
+}
+function tagsSvg(tags, op) {
+  return tags.map((g) => `<g opacity="${r1(op)}"><text x="${g.x}" y="${g.y}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="15" fill="${COL.ink}" paint-order="stroke" stroke="#EDF1EA" stroke-width="5">${g.t}</text></g>`).join("");
+}
+
+/* ───────────────────────── wheel scene ───────────────────────── */
+// Illustrative proportions (not to scale for M phase so it stays visible).
+const ARCS = [["G1", 0, 0.42, "#6FA0DD"], ["S", 0.42, 0.70, "#1C6B58"], ["G2", 0.70, 0.90, "#C08A00"], ["M", 0.90, 1, "#C0394B"]];
+const WHEEL = {
+  all: { hi: -1, ptr: 0.0, g0: 0, inter: 0 },
+  interphase: { hi: -2, ptr: 0.45, g0: 0, inter: 1 },
+  G1: { hi: 0, ptr: 0.21, g0: 0, inter: 0 },
+  S: { hi: 1, ptr: 0.56, g0: 0, inter: 0 },
+  G2: { hi: 2, ptr: 0.8, g0: 0, inter: 0 },
+  M: { hi: 3, ptr: 0.95, g0: 0, inter: 0 },
+  G0: { hi: 0, ptr: 0.12, g0: 1, inter: 0 },
+};
+function drawWheel(a, b, t) {
+  const st = mix(a, b, t), hi = t < 0.5 ? a.hi : b.hi;
+  const cx = 270, cy = 222, R = 150, w = 54;
+  const pt = (f, r) => { const th = f * Math.PI * 2 - Math.PI / 2; return [cx + Math.cos(th) * r, cy + Math.sin(th) * r]; };
+  let s = "";
+  ARCS.forEach(([name, f0, f1, col], i) => {
+    const on = hi === -1 || hi === i || (hi === -2 && i < 3);
+    const [x0, y0] = pt(f0 + 0.004, R), [x1, y1] = pt(f1 - 0.004, R), [x2, y2] = pt(f1 - 0.004, R - w), [x3, y3] = pt(f0 + 0.004, R - w);
+    const large = f1 - f0 > 0.5 ? 1 : 0;
+    s += `<path d="M${r1(x0)},${r1(y0)} A${R},${R} 0 ${large} 1 ${r1(x1)},${r1(y1)} L${r1(x2)},${r1(y2)} A${R - w},${R - w} 0 ${large} 0 ${r1(x3)},${r1(y3)} Z" fill="${col}" opacity="${on ? 1 : 0.22}"/>`;
+    const [lx, ly] = pt((f0 + f1) / 2, R - w / 2);
+    s += `<text x="${r1(lx)}" y="${r1(ly + 7)}" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="${name === "M" ? 18 : 24}" fill="#fff" opacity="${on ? 1 : 0.5}">${name}</text>`;
+  });
+  // interphase bracket
+  if (st.inter > 0.02) { const [x0, y0] = pt(0.0, R + 18), [x1, y1] = pt(0.9, R + 18); s += `<path d="M${r1(x0)},${r1(y0)} A${R + 18},${R + 18} 0 1 1 ${r1(x1)},${r1(y1)}" fill="none" stroke="${COL.ink}" stroke-width="3" opacity="${r1(st.inter)}"/><text x="${cx}" y="${cy + R + 52}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="17" fill="${COL.ink}" opacity="${r1(st.inter)}">interphase &gt; 95%</text>`; }
+  // pointer
+  const [px, py] = pt(st.ptr, R - w - 18);
+  s += `<line x1="${cx}" y1="${cy}" x2="${r1(px)}" y2="${r1(py)}" stroke="${COL.ink}" stroke-width="5" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="10" fill="${COL.ink}"/>`;
+  // G0 loop
+  if (st.g0 > 0.02) {
+    const [gx, gy] = pt(0.16, R + 4);
+    s += `<g opacity="${r1(st.g0)}"><path d="M${r1(gx)},${r1(gy)} C${r1(gx + 120)},${r1(gy - 70)} ${r1(gx + 170)},${r1(gy + 40)} ${r1(gx + 110)},${r1(gy + 70)}" fill="none" stroke="#7A6CB0" stroke-width="4" stroke-dasharray="8 6"/><circle cx="${r1(gx + 120)}" cy="${r1(gy + 72)}" r="34" fill="#7A6CB0"/><text x="${r1(gx + 120)}" y="${r1(gy + 80)}" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="24" fill="#fff">G0</text><text x="${r1(gx + 120)}" y="${r1(gy + 126)}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="${COL.ink}">quiescent</text></g>`;
+  }
+  s += `<text x="590" y="24" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="13" fill="${COL.muted}">not to scale · human cell ≈ 24 h</text>`;
+  return s;
+}
+
+/* ───────────────────────── DNA graph scene ───────────────────────── */
+const GX = ["G1", "S", "G2", "M", "after"];
+const GRAPH = {
+  "dna-G1": { mode: 0, reveal: 0.2 }, "dna-S": { mode: 0, reveal: 0.42 }, "dna-G2": { mode: 0, reveal: 0.62 },
+  "dna-M": { mode: 0, reveal: 0.82 }, "dna-done": { mode: 0, reveal: 1 }, "meio-all": { mode: 1, reveal: 1 },
+};
+function drawGraph(a, b, t) {
+  const st = mix(a, b, t), mode = b.mode;
+  const x0 = 80, x1 = 560, y0 = 360, yTop = 70;
+  const ys = { "4": yTop + 10, "2": (yTop + y0) / 2 + 20, "1": y0 - 40 };
+  const labels = mode ? ["G1", "S", "G2", "Meiosis I", "Meiosis II", "gametes"] : ["G1", "S", "G2", "M phase", "daughter cells"];
+  const n = labels.length, step = (x1 - x0) / n;
+  // DNA (C) line and chromosome (n) line as point lists over [0..n]
+  const dna = mode ? [[0, 2], [1, 2], [2, 4], [3, 4], [4, 2], [5, 1], [6, 1]] : [[0, 2], [1, 2], [2, 4], [3.8, 4], [4, 2], [5, 2]];
+  const chr = mode ? [[0, 2], [3.9, 2], [4, 1], [6, 1]] : [[0, 2], [5, 2]];
+  const P = (pts) => pts.map(([i, v]) => `${r1(x0 + i * step)},${r1(ys[v] + (pts === chr ? 6 : 0))}`).join(" ");
+  const clipW = r1((x1 - x0) * st.reveal + 2);
+  const cid = "rv" + Math.random().toString(36).slice(2, 8);
+  let s = `<defs><clipPath id="${cid}"><rect x="${x0}" y="0" width="${clipW}" height="${H}"/></clipPath></defs>`;
+  s += `<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y0}" stroke="${COL.ink}" stroke-width="2"/><line x1="${x0}" y1="${y0}" x2="${x0}" y2="${yTop - 10}" stroke="${COL.ink}" stroke-width="2"/>`;
+  [["4", "4C"], ["2", "2C · 2n"], ["1", "C · n"]].forEach(([k, l]) => (s += `<text x="${x0 - 10}" y="${ys[k] + 5}" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="15" fill="${COL.muted}">${l}</text><line x1="${x0}" y1="${ys[k]}" x2="${x1}" y2="${ys[k]}" stroke="${COL.line}" stroke-dasharray="4 6"/>`));
+  labels.forEach((l, i) => (s += `<text x="${r1(x0 + (i + 0.5) * step)}" y="${y0 + 26}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="${mode ? 13 : 15}" fill="${COL.ink}">${l}</text>`));
+  s += `<g clip-path="url(#${cid})"><polyline points="${P(dna)}" fill="none" stroke="${COL.accent}" stroke-width="6" stroke-linejoin="round"/><polyline points="${P(chr)}" fill="none" stroke="#C0394B" stroke-width="4" stroke-dasharray="10 7"/></g>`;
+  s += `<g font-family="JetBrains Mono, monospace" font-size="15"><rect x="330" y="20" width="16" height="6" fill="${COL.accent}"/><text x="352" y="28" fill="${COL.ink}">DNA content (C)</text><rect x="330" y="40" width="16" height="4" fill="#C0394B"/><text x="352" y="48" fill="${COL.ink}">chromosome number (n)</text></g>`;
+  return s;
+}
+
+/* ───────────────────────── public API ───────────────────────── */
+const sceneStates = { cell: S, wheel: WHEEL, graph: GRAPH };
+
+function drawScene(scene, fromName, toName, t = 1) {
+  const table = sceneStates[scene];
+  const A = table[fromName] || table[toName], B = table[toName];
+  if (!B) return `<svg viewBox="0 0 ${W} ${H}"><text x="20" y="40">unknown state ${toName}</text></svg>`;
+  const e = ease(Math.max(0, Math.min(1, t)));
+  let body;
+  if (scene === "cell") {
+    const st = mix(A, B, e);
+    st.chromatids.forEach((c, i) => { c.col = mixColor(A.chromatids[i]?.col ?? B.chromatids[i].col, B.chromatids[i].col, e); c.col2 = mixColor(A.chromatids[i]?.col2 ?? B.chromatids[i].col2, B.chromatids[i].col2, e); c.pole = B.chromatids[i].pole; });
+    st.cells.forEach((c, i) => (c.rect = B.cells[i].rect));
+    body = drawCell(st);
+    const sameLabel = A.label === B.label;
+    body += tagsSvg(B.tags, sameLabel ? 1 : e) + (sameLabel ? "" : tagsSvg(A.tags, 1 - e));
+    const lab = (txt, op) => `<text x="16" y="${H - 14}" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="26" fill="${COL.accent}" opacity="${r1(op)}">${txt}</text>`;
+    body += sameLabel ? lab(B.label, 1) : lab(A.label, 1 - e) + lab(B.label, e);
+    body += `<text x="${W - 14}" y="${H - 16}" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="13" fill="${COL.muted}">example cell · 2n = 4</text>`;
+  } else if (scene === "wheel") body = drawWheel(A, B, e);
+  else body = drawGraph(A, B, e);
+  return `<svg class="anim" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${scene} diagram">${body}</svg>`;
+}
+
+// Shared slide renderer for carousels (portrait), video frames (landscape) and the site.
+// Pure DOM-string building + a fit() helper. Animated diagrams come from cellanim.js.
+
+
+const LETTERS = ["A", "B", "C", "D"];
+const esc = (s) => String(s);
+
+/** Adds the generated MCQ topic and numbers slides. */
+function buildTopics(data) {
+  const topics = data.topics.map((t) => ({ ...t, slides: [...t.slides] }));
+  const n = data.mcq.length;
+  const chapNo = (data.chapter.match(/Chapter (\d+)/) || [, ""])[1];
+  topics.push({
+    id: String(topics.length + 1).padStart(2, "0") + "-neet-practice",
+    short: "NEET practice MCQs",
+    title: `NEET practice: ${n} MCQs`,
+    slides: [
+      {
+        kind: "cover",
+        eyebrow: "Practice · Beyond NCERT format",
+        title: `${n} NEET-style MCQs`,
+        sub: `Every fact comes from Chapter ${chapNo}. Pause on each question, answer, then check.`,
+        say: [`${n} practice questions. Pause on each one, answer it, then let the answer appear.`],
+      },
+      ...data.mcq.map((m, i) => ({ kind: "mcq", extra: true, n: i + 1, ...m })),
+    ],
+  });
+  return topics;
+}
+
+/** Number of reveal steps a slide has in video mode. */
+function stepCount(s) {
+  if (s.kind === "cover") return 1;
+  if (s.kind === "mcq") return 2;
+  if (s.kind === "qa") return 1 + s.a.length;
+  return Math.max(1, s.points.length);
+}
+
+const plain = (h) => String(h).replace(/<sub>(.*?)<\/sub>/g, "$1").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+
+/** Caption text for a step (video). With voice=true, every step gets spoken text. */
+function captionFor(s, step, voice = false) {
+  if (s.say && s.say[step]) return s.say[step];
+  if (s.kind === "mcq") {
+    if (!voice) return step === 0 ? "Pause the video and choose your answer." : "Answer: " + LETTERS[s.a] + ". " + s.why;
+    return step === 0
+      ? `Question ${s.n}. ${plain(s.q)}. ` + s.o.map((o, i) => `${LETTERS[i]}: ${plain(o)}.`).join(" ") + " Pause the video and choose your answer."
+      : `The answer is ${LETTERS[s.a]}, ${plain(s.o[s.a])}. ${plain(s.why)}`;
+  }
+  if (s.kind === "qa") {
+    if (!voice) return step === 0 ? "Think of your answer first. The model answer follows." : "";
+    return step === 0 ? plain(s.q) + " Think of your answer first." : plain(s.a[step - 1]);
+  }
+  if (voice && s.kind === "points" && s.points[step]) return plain(s.points[step]);
+  return "";
+}
+
+/** Text for the speech engine: expands symbols the voice would misread. */
+function speakable(text) {
+  return plain(text)
+    .replace(/\bG([0-2])\b/g, (_, d) => "G " + ["zero", "one", "two"][d])
+    .replace(/\b([248])C\b/g, (_, d) => ({ 2: "two", 4: "four", 8: "eight" })[d] + " C")
+    .replace(/\b(\d)n\b/g, (_, d) => ({ 2: "two", 3: "three", 4: "four" })[d] + " n")
+    .replace(/(\d)\s*%/g, "$1 percent")
+    .replace(/→/g, " to ").replace(/~/g, "about ").replace(/\bEx (\d+)\./g, "Exercise $1.")
+    .replace(/\bvs\b/g, "versus").replace(/\be\.g\./g, "for example").replace(/\bi\.e\./g, "that is")
+    .replace(/[·•]/g, ",").replace(/\s+/g, " ").trim();
+}
+
+function renderDiagram(d, a) {
+  if (!d) return "";
+  switch (d.type) {
+    case "anim":
+      return `<div class="dia-anim">${drawScene(d.scene, a.from, a.to, a.t)}</div>`;
+    case "nctable":
+      return `<table class="dia-table nct"><thead><tr><th>Stage</th><th>Chromosomes (N)</th><th>DNA (C)</th></tr></thead><tbody>${d.rows
+        .map(([st, n, c]) => `<tr><th>${st}</th><td>${n}</td><td>${c}</td></tr>`).join("")}</tbody></table>`;
+    case "compare":
+      return `<div class="dia-compare">${[d.left, d.right]
+        .map((c) => `<div><h4>${c.h}</h4>${c.items.map((x) => `<p>${x}</p>`).join("")}</div>`)
+        .join("")}</div>`;
+    case "binomial": {
+      const parts = [
+        `<div><span class="bn-word"><em>M</em>angifera</span><span class="bn-brace"></span><span class="bn-label">Generic name<br>(genus · capital)</span></div>`,
+        `<div><span class="bn-word"><em>i</em>ndica</span><span class="bn-brace"></span><span class="bn-label">Specific epithet<br>(small letter)</span></div>`,
+      ];
+      if (d.author)
+        parts.push(`<div><span class="bn-word author">Linn.</span><span class="bn-brace"></span><span class="bn-label">Author<br>(abbreviated)</span></div>`);
+      return `<div class="dia-binomial"><div class="bn-row">${parts.join("")}</div><div class="bn-note">Mango · Latin · italics in print</div></div>`;
+    }
+    case "ladder": {
+      const ranks = [
+        ["Kingdom", ""],
+        ["Phylum", "or Division (plants)"],
+        ["Class", ""],
+        ["Order", ""],
+        ["Family", ""],
+        ["Genus", ""],
+        ["Species", "lowest category"],
+      ];
+      const rungs = ranks
+        .map(([r, s], i) => `<div class="ld-rung" style="width:${8 + i * 1.1}em;align-self:center">${r}${s ? `<small>${s}</small>` : ""}</div>`)
+        .join("");
+      const trend = d.trend
+        ? `<div class="ld-trend"><div>Fewer common characters<br>Harder to relate taxa</div><div class="ld-arrow"></div><div>More common characters<br>(ascending order, Fig 1.1)</div></div>`
+        : "";
+      return `<div class="dia-ladder"><div class="ld-rungs">${rungs}</div>${trend}</div>`;
+    }
+    case "tree": {
+      const node = (n, cls) =>
+        `<div class="tr-node ${cls}">${n.italic ? `<i>${n.label}</i>` : n.label}${n.sub ? `<small>${n.sub}</small>` : ""}</div>`;
+      const col = (c) =>
+        `<div class="tr-col">${node(c, "lvl1")}${c.children ? `<div class="tr-leaves">${c.children.map((k) => node(k, "")).join("")}</div>` : ""}</div>`;
+      return `<div class="dia-tree">${node(d.root, "root")}<div class="tr-kids">${d.root.children.map(col).join("")}</div></div>`;
+    }
+    case "table11": {
+      const cols = ["Man", "Housefly", "Mango", "Wheat"];
+      const rows = [
+        ["Biological name", ["<i>Homo sapiens</i>", "<i>Musca domestica</i>", "<i>Mangifera indica</i>", "<i>Triticum aestivum</i>"]],
+        ["Genus", ["<i>Homo</i>", "<i>Musca</i>", "<i>Mangifera</i>", "<i>Triticum</i>"]],
+        ["Family", ["Hominidae", "Muscidae", "Anacardiaceae", "Poaceae"]],
+        ["Order", ["Primata", "Diptera", "Sapindales", "Poales"]],
+        ["Class", ["Mammalia", "Insecta", "Dicotyledonae", "Monocotyledonae"]],
+        ["Phylum / Division", ["Chordata", "Arthropoda", "Angiospermae", "Angiospermae"]],
+      ];
+      return `<table class="dia-table" lang="en"><thead><tr><th>Common name</th>${cols.map((c) => `<th>${c}</th>`).join("")}</tr></thead><tbody>${rows
+        .map(([h, v]) => `<tr><th>${h}</th>${v.map((x) => `<td>${x}</td>`).join("")}</tr>`)
+        .join("")}</tbody></table>`;
+    }
+    case "timeline":
+      return `<ol class="dia-timeline">${d.events.map(([y, e]) => `<li><span class="yr">${y}</span><span class="ev">${e}</span></li>`).join("")}</ol>`;
+    case "nested": {
+      let inner = "";
+      for (let i = d.rings.length - 1; i >= 0; i--) inner = `<div class="ns-ring"><span>${d.rings[i]}</span>${inner}</div>`;
+      return `<div class="dia-nested">${inner}</div>`;
+    }
+    case "chips":
+      return `<div class="dia-chips">${d.items.map((x, i) => `${i ? '<span class="arr">→</span>' : ""}<span class="chip">${x}</span>`).join("")}</div>`;
+  }
+  return "";
+}
+
+/**
+ * Render one slide.
+ * opts: { orient: "portrait"|"landscape", step: number|null (null = all visible),
+ *         topic, index, total, chapter }
+ */
+function renderSlide(s, opts) {
+  const { orient = "portrait", step = null, topic, index = 0, total = 1, chapter = "", specimen = "TAXON <i>Homo sapiens</i> · Ch 1", animT = 1 } = opts;
+  const all = step === null;
+  const cls = `sl ${orient} kind-${s.kind}${s.extra ? " is-extra" : ""}`;
+  const tag = s.extra ? "NEET tip · Beyond NCERT" : topic.short;
+  const top = `<div class="sl-top"><span class="sl-tag">${tag}</span><span>${String(index + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}</span></div>`;
+  const foot = `<div class="sl-foot"><span>${chapter}</span><span>NCERT Biology XI</span></div>`;
+
+  if (s.kind === "cover") {
+    return `<section class="${cls}">${top}<div class="cv-main"><div class="cv-eyebrow">${s.eyebrow}</div><h1 class="cv-title">${s.title}</h1><p class="cv-sub">${s.sub}</p><div class="cv-specimen">${specimen}</div></div>${foot}</section>`;
+  }
+
+  const vis = (i) => {
+    if (all) return "";
+    if (i > step) return "step-hidden";
+    return i === step ? "step-current" : "";
+  };
+
+  if (s.kind === "qa") {
+    const ans = s.a.map((x, i) => `<li data-i="${i}" class="${all ? "" : vis(i + 1)}">${x}</li>`).join("");
+    return `<section class="${cls}">${top}<div class="sl-body"><div class="qa-label">NCERT exercise</div><h2 class="qa-q">${s.q}</h2><div class="qa-label">Model answer</div><ul class="sl-points">${ans}</ul></div>${foot}</section>`;
+  }
+
+  if (s.kind === "mcq") {
+    const reveal = all || step >= 1;
+    const opts2 = s.o.map((o, i) => `<li class="${reveal && i === s.a ? "correct" : ""}"><span>${LETTERS[i]}</span><div>${o}</div></li>`).join("");
+    return `<section class="${cls}">${top}<div class="sl-body"><div class="qa-label">Question ${s.n}</div><h2 class="qa-q">${s.q}</h2><ol class="mcq-opts">${opts2}</ol><div class="mcq-why ${reveal ? "" : "step-hidden"}"><b>Answer ${LETTERS[s.a]}.</b> ${s.why}</div></div>${foot}</section>`;
+  }
+
+  const pts = s.points.map((p, i) => `<li data-i="${i}" class="${vis(i)}">${p}</li>`).join("");
+  // Animated slides: step i shows anim.states[i]; carousels (step null) show the last state.
+  let anim = null, diagram = s.diagram;
+  if (s.anim) {
+    const st = s.anim.states;
+    const i = step === null ? (s.anim.still ? st.indexOf(s.anim.still) : st.length - 1) : Math.min(step, st.length - 1);
+    anim = { from: st[Math.max(0, animT < 1 ? i - 1 : i)], to: st[i], t: animT };
+    diagram = { type: "anim", scene: s.anim.scene };
+  }
+  const dia = diagram ? `<div class="sl-dia">${renderDiagram(diagram, anim)}</div>` : "";
+  const bodyCls = `sl-body${dia ? " has-diagram" : ""}${s.points.length ? "" : " no-points"}`;
+  const list = s.points.length ? `<ul class="sl-points${s.numbered ? " numbered" : ""}">${pts}</ul>` : "";
+  // Portrait: diagram above points. Landscape: points left, diagram right (CSS order).
+  return `<section class="${cls}">${top}<h2 class="sl-title">${s.title}</h2><div class="${bodyCls}">${dia}${list}</div>${foot}</section>`;
+}
+
+/** Shrink the slide's base font size until nothing overflows. */
+function fit(el, max = 36, min = 18) {
+  let fs = max;
+  el.style.setProperty("--fs", fs + "px");
+  const body = el.querySelector(".sl-body") || el;
+  const over = () => el.scrollHeight > el.clientHeight + 1 || body.scrollHeight > body.clientHeight + 1 || body.scrollWidth > body.clientWidth + 1;
+  while (over() && fs > min) {
+    fs -= 1;
+    el.style.setProperty("--fs", fs + "px");
+  }
+  return fs;
+}
+
+
+// Revision page logic. DATA, buildTopics, renderSlide and fit are inlined above this by build-site.mjs.
+(function () {
+  const topics = buildTopics(DATA);
+  const $ = (id) => document.getElementById(id);
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem("lw:" + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { localStorage.setItem("lw:" + k, JSON.stringify(v)); } catch {} },
+  };
+
+  /* ---------- routing ---------- */
+  const views = ["learn", "glossary", "lab", "quiz"];
+  function route() {
+    const v = views.includes(location.hash.slice(1)) ? location.hash.slice(1) : "learn";
+    views.forEach((x) => { $("v-" + x).hidden = x !== v; });
+    document.querySelectorAll("nav.tabs a").forEach((a) => a.setAttribute("aria-current", a.getAttribute("href") === "#" + v ? "page" : "false"));
+    if (v === "learn") layoutSlide();
+  }
+  window.addEventListener("hashchange", route);
+
+  /* ---------- learn ---------- */
+  let ti = Math.min(store.get("topic", 0), topics.length - 1), si = 0;
+  const strip = (h) => { const d = document.createElement("div"); d.innerHTML = h; return d.textContent; };
+
+  $("topics").innerHTML = topics.map((t, i) => `<button data-i="${i}"><span class="n">${String(i + 1).padStart(2, "0")}</span>${t.short}</button>`).join("");
+  $("topics").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) selectTopic(+b.dataset.i); });
+
+  function selectTopic(i) {
+    ti = i; si = 0; store.set("topic", i);
+    document.querySelectorAll("#topics button").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.i === i)));
+    const t = topics[i];
+    $("vid-name").textContent = t.id + ".mp4";
+    $("video-box").innerHTML = `<video controls preload="metadata" playsinline src="videos/${t.id}.mp4"></video>`;
+    $("video-box").querySelector("video").addEventListener("error", () => {
+      $("video-box").innerHTML = `<div class="video-missing"><p>This video isn't loaded here. Open <b>${t.id}.mp4</b> from the videos folder.</p></div>`;
+    });
+    $("notes").innerHTML = `<div class="panel-label"><span>In this topic</span><span>${t.slides.length} slides</span></div><ul>${t.slides
+      .map((s, k) => `<li><a href="#learn" data-k="${k}">${strip(s.title || s.q || "")}</a>${s.extra ? ' <span class="badge-extra">NEET tip</span>' : ""}</li>`).join("")}</ul>`;
+    $("dots").innerHTML = t.slides.map((_, k) => `<button data-k="${k}" aria-label="Slide ${k + 1}"></button>`).join("");
+    showSlide();
+  }
+  $("notes").addEventListener("click", (e) => { const a = e.target.closest("a[data-k]"); if (a) { e.preventDefault(); si = +a.dataset.k; showSlide(); $("frame").scrollIntoView({ block: "nearest", behavior: "smooth" }); } });
+  $("dots").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) { si = +b.dataset.k; showSlide(); } });
+
+  let current = null;
+  function showSlide() {
+    const t = topics[ti], s = t.slides[si];
+    $("frame").innerHTML = renderSlide(s, { orient: "portrait", step: null, topic: t, index: si, total: t.slides.length, chapter: DATA.chapter });
+    current = $("frame").firstElementChild;
+    current.style.transform = "none";
+    fit(current, 54, 18);
+    layoutSlide();
+    stopAnim();
+    $("anim-ctl").hidden = !s.anim;
+    $("anim-stage").textContent = s.anim ? `${s.anim.states.length} stages` : "";
+    $("count").textContent = `${si + 1} / ${t.slides.length}`;
+    $("prev").disabled = si === 0;
+    $("next").disabled = si === t.slides.length - 1;
+    $("slide-kind").textContent = s.extra ? "NEET tip · beyond NCERT" : s.kind === "qa" ? "NCERT exercise" : "";
+    document.querySelectorAll("#dots button").forEach((b) => b.setAttribute("aria-current", String(+b.dataset.k === si)));
+  }
+  let raf = 0;
+  function stopAnim() { cancelAnimationFrame(raf); raf = 0; $("anim-play").textContent = "▶ Play animation"; }
+  $("anim-play").onclick = () => {
+    if (raf) return stopAnim();
+    const s = topics[ti].slides[si], box = current.querySelector(".dia-anim");
+    if (!s.anim || !box) return;
+    const states = s.anim.states.filter((x, i, a) => i === 0 || x !== a[i - 1]);
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const SEG = reduce ? 1 : 1600, HOLD = 1100;
+    let t0 = performance.now();
+    $("anim-play").textContent = "■ Stop";
+    const tick = (now) => {
+      const el = now - t0, seg = Math.floor(el / (SEG + HOLD)), k = Math.min(seg + 1, states.length - 1);
+      const p = Math.min(1, (el - seg * (SEG + HOLD)) / SEG);
+      box.innerHTML = drawScene(s.anim.scene, states[Math.max(0, k - 1)], states[k], states.length === 1 ? 1 : p);
+      $("anim-stage").textContent = `Stage ${k + 1} of ${states.length}`;
+      if (seg >= states.length - 1) return stopAnim();
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+  };
+  function layoutSlide() {
+    if (!current) return;
+    const w = $("frame").clientWidth;
+    if (w) current.style.transform = `scale(${w / 1080})`;
+  }
+  const step = (d) => { const n = topics[ti].slides.length; si = Math.max(0, Math.min(n - 1, si + d)); showSlide(); };
+  $("prev").onclick = () => step(-1);
+  $("next").onclick = () => step(1);
+  document.addEventListener("keydown", (e) => {
+    if ($("v-learn").hidden || /INPUT|SELECT|TEXTAREA|VIDEO/.test(document.activeElement.tagName)) return;
+    if (e.key === "ArrowRight") step(1);
+    if (e.key === "ArrowLeft") step(-1);
+  });
+  let x0 = null;
+  $("frame").addEventListener("pointerdown", (e) => { x0 = e.clientX; });
+  $("frame").addEventListener("pointerup", (e) => { if (x0 !== null && Math.abs(e.clientX - x0) > 40) step(e.clientX < x0 ? 1 : -1); x0 = null; });
+  new ResizeObserver(layoutSlide).observe($("frame"));
+
+  /* ---------- glossary ---------- */
+  function renderCards() {
+    const q = $("gl-q").value.trim().toLowerCase();
+    $("cards").innerHTML = DATA.glossary
+      .filter(([t, d]) => !q || (t + " " + d).toLowerCase().includes(q))
+      .map(([t, d]) => `<button class="card" aria-pressed="false"><span class="term">${t}</span><span class="def">${d}</span><span class="hint">Tap to flip</span></button>`)
+      .join("") || `<p class="muted">No term matches “${q.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c])}”.</p>`;
+  }
+  $("gl-q").addEventListener("input", renderCards);
+  $("cards").addEventListener("click", (e) => { const c = e.target.closest(".card"); if (c) c.setAttribute("aria-pressed", String(c.getAttribute("aria-pressed") !== "true")); });
+  $("gl-all").onclick = () => document.querySelectorAll(".card").forEach((c) => c.setAttribute("aria-pressed", "true"));
+  $("gl-none").onclick = () => document.querySelectorAll(".card").forEach((c) => c.setAttribute("aria-pressed", "false"));
+  renderCards();
+
+  /* ---------- stage lab (chapters with drills) ---------- */
+  function stageLab() {
+    const lab = document.querySelector("#v-lab .lab");
+    lab.previousElementSibling.textContent = "Put stages in order, and track chromosome number (N) and DNA content (C).";
+    lab.innerHTML = `<div class="box"><h3 style="margin:0;font-family:var(--f-display)">Put the stages in order</h3>
+      <div class="drill-pick seg" id="drill-pick" role="group" aria-label="Drill"></div>
+      <p class="muted" style="margin:8px 0 0">Tap the stages in the order they happen.</p>
+      <div class="built" id="built" aria-live="polite"></div><div class="pool" id="pool"></div>
+      <div class="status" id="lad-status"></div><button class="btn" id="lad-reset" style="margin-top:8px">Shuffle again</button></div>
+      <div class="box"><h3 style="margin:0;font-family:var(--f-display)">N and C tracker</h3>
+      <p class="muted" style="margin:4px 0 0">For a diploid cell (2n, 2C at G<sub>1</sub>), pick N and C at each stage.</p>
+      <div class="nc-grid" id="nc"></div>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap"><button class="btn primary" id="nc-check">Check</button><button class="btn" id="nc-show">Show answers</button></div>
+      <div class="status" id="nc-status"></div></div>`;
+    let d = 0, built = [], pool = [];
+    const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+    $("drill-pick").innerHTML = DATA.drills.map((x, i) => `<button aria-pressed="${i === 0}" data-i="${i}">${x.name}</button>`).join("");
+    $("drill-pick").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; d = +b.dataset.i; $("drill-pick").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); reset(); });
+    const reset = () => { built = []; pool = shuffle(DATA.drills[d].order); draw(); };
+    function draw() {
+      const order = DATA.drills[d].order;
+      $("pool").innerHTML = pool.filter((x) => !built.includes(x)).map((x) => `<button>${x}</button>`).join("");
+      $("built").innerHTML = built.map((x, i) => `<span class="${x === order[i] ? "" : "wrong"}">${x}</span>`).join("");
+      const bad = built.findIndex((x, i) => x !== order[i]);
+      $("lad-status").className = "status " + (bad >= 0 ? "no" : built.length === order.length ? "ok" : "");
+      $("lad-status").textContent = bad >= 0 ? `Not quite. ${bad ? "After " + order[bad - 1] + " comes" : "It starts with"} ${order[bad]}.` : built.length === order.length ? "Correct order!" : "";
+      if (bad >= 0) $("pool").querySelectorAll("button").forEach((b) => (b.disabled = true));
+    }
+    $("pool").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) { built.push(b.textContent); draw(); } });
+    $("lad-reset").onclick = reset;
+    reset();
+    const NS = ["n", "2n", "4n"], CS = ["C", "2C", "4C"];
+    $("nc").innerHTML = `<span class="h">Stage</span><span class="h">N</span><span class="h">C</span>` + DATA.ncQuiz.map(([st], i) =>
+      `<label for="ncn-${i}">${st}</label><select id="ncn-${i}" aria-label="${st} N"><option value="">–</option>${NS.map((x) => `<option>${x}</option>`).join("")}</select><select id="ncc-${i}" aria-label="${st} C"><option value="">–</option>${CS.map((x) => `<option>${x}</option>`).join("")}</select>`).join("");
+    $("nc-check").onclick = () => {
+      let ok = 0, tot = 0;
+      DATA.ncQuiz.forEach(([, n, c], i) => [["ncn-", n], ["ncc-", c]].forEach(([p, v]) => { const s = $(p + i); tot++; const g = s.value === v; ok += g; s.className = s.value ? (g ? "ok" : "no") : ""; }));
+      $("nc-status").className = "status " + (ok === tot ? "ok" : "no");
+      $("nc-status").textContent = ok === tot ? "All correct." : `${ok} of ${tot} correct.`;
+    };
+    $("nc-show").onclick = () => DATA.ncQuiz.forEach(([, n, c], i) => { $("ncn-" + i).value = n; $("ncc-" + i).value = c; $("ncn-" + i).className = $("ncc-" + i).className = "ok"; });
+  }
+  if (DATA.drills) stageLab(); else {
+  /* ---------- hierarchy lab ---------- */
+  const ORDER = ["Species", "Genus", "Family", "Order", "Class", "Phylum / Division", "Kingdom"];
+  let built = [];
+  const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  function ladder(reset) {
+    if (reset) { built = []; $("pool").dataset.order = JSON.stringify(shuffle(ORDER)); }
+    const pool = JSON.parse($("pool").dataset.order).filter((x) => !built.includes(x));
+    $("pool").innerHTML = pool.map((x) => `<button>${x}</button>`).join("");
+    $("built").innerHTML = built.map((x, i) => `<span class="${x === ORDER[i] ? "" : "wrong"}">${x}</span>`).join('<span aria-hidden="true" style="background:none;color:var(--muted);padding:8px 0">→</span>');
+    const wrong = built.some((x, i) => x !== ORDER[i]);
+    $("lad-status").className = "status " + (wrong ? "no" : built.length === 7 ? "ok" : "");
+    $("lad-status").textContent = wrong
+      ? `Not quite. After ${built[built.findIndex((x, i) => x !== ORDER[i]) - 1] || "nothing"} comes ${ORDER[built.findIndex((x, i) => x !== ORDER[i])]}.`
+      : built.length === 7 ? "Correct! Common characters decrease as you go up." : "";
+    if (wrong) $("pool").querySelectorAll("button").forEach((b) => (b.disabled = true));
+  }
+  $("pool").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) { built.push(b.textContent); ladder(false); } });
+  $("lad-reset").onclick = () => ladder(true);
+  ladder(true);
+
+  const T11 = {
+    Man: ["Homo sapiens", "Homo", "Hominidae", "Primata", "Mammalia", "Chordata"],
+    Housefly: ["Musca domestica", "Musca", "Muscidae", "Diptera", "Insecta", "Arthropoda"],
+    Mango: ["Mangifera indica", "Mangifera", "Anacardiaceae", "Sapindales", "Dicotyledonae", "Angiospermae"],
+    Wheat: ["Triticum aestivum", "Triticum", "Poaceae", "Poales", "Monocotyledonae", "Angiospermae"],
+  };
+  const ROWS = ["Biological name", "Genus", "Family", "Order", "Class", "Phylum / Division"];
+  let org = "Mango";
+  $("org").innerHTML = Object.keys(T11).map((o) => `<button aria-pressed="${o === org}">${o}</button>`).join("");
+  $("org").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; org = b.textContent; $("org").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); table(); });
+  function table() {
+    $("tbl").innerHTML = ROWS.map((r, i) => {
+      const opts = [...new Set(Object.values(T11).map((v) => v[i]))].sort();
+      return `<label for="t11-${i}">${r}</label><select id="t11-${i}"><option value="">Choose…</option>${opts.map((o) => `<option>${o}</option>`).join("")}</select>`;
+    }).join("");
+    $("tbl-status").textContent = "";
+  }
+  $("tbl-check").onclick = () => {
+    let ok = 0;
+    ROWS.forEach((_, i) => { const s = $("t11-" + i); const good = s.value === T11[org][i]; ok += good; s.className = s.value ? (good ? "ok" : "no") : ""; });
+    $("tbl-status").className = "status " + (ok === 6 ? "ok" : "no");
+    $("tbl-status").textContent = ok === 6 ? `All 6 correct for ${org}.` : `${ok} of 6 correct. Fix the red ones.`;
+  };
+  $("tbl-show").onclick = () => { ROWS.forEach((_, i) => { const s = $("t11-" + i); s.value = T11[org][i]; s.className = "ok"; }); $("tbl-status").className = "status"; $("tbl-status").textContent = ""; };
+  table();
+
+  }
+  /* ---------- quiz ---------- */
+  const Q = DATA.mcq, L = ["A", "B", "C", "D"];
+  let qi = 0, answers = [];
+  function quiz() {
+    const best = store.get("best", null);
+    if (qi >= Q.length) {
+      const score = answers.filter((a, i) => a === Q[i].a).length;
+      if (best === null || score > best) store.set("best", score);
+      const missed = Q.map((q, i) => [q, i]).filter(([q, i]) => answers[i] !== q.a);
+      $("quiz").innerHTML = `<div class="q-head"><span>Finished</span><span>Best: ${Math.max(score, best ?? 0)} / ${Q.length}</span></div>
+        <div class="score-big">${score} / ${Q.length}</div>
+        <p>${score === Q.length ? "Perfect. You know this chapter." : score >= 15 ? "Strong. Revise the ones you missed below." : "Watch the videos for the topics below, then try again."}</p>
+        ${missed.length ? `<div class="panel-label"><span>Review</span></div><ol style="padding-left:20px;display:grid;gap:10px">${missed.map(([q]) => `<li>${q.q}<br><b>${L[q.a]}. ${q.o[q.a]}</b> <span class="muted">${q.why}</span></li>`).join("")}</ol>` : ""}
+        <div class="q-nav"><button class="btn primary" id="q-restart">Start again</button>${missed.length ? '<button class="btn" id="q-wrong">Retry missed only</button>' : ""}</div>`;
+      $("q-restart").onclick = () => { qi = 0; answers = []; order = Q.map((_, i) => i); quiz(); };
+      const w = $("q-wrong"); if (w) w.onclick = () => { order = missed.map(([, i]) => i); qi = 0; answers = []; retry(); };
+      return;
+    }
+    renderQ(qi, Q.length);
+  }
+  let order = Q.map((_, i) => i);
+  function renderQ(pos, total) {
+    const idx = order[pos], q = Q[idx], picked = answers[idx];
+    $("quiz").innerHTML = `<div class="q-head"><span>Question ${pos + 1} of ${total}</span><span>Score ${answers.filter((a, i) => a !== undefined && a === Q[i].a).length}</span></div>
+      <div class="q-bar"><div style="width:${(pos / total) * 100}%"></div></div>
+      <p class="q-text">${q.q}</p>
+      <div class="opts">${q.o.map((o, i) => `<button data-i="${i}" ${picked !== undefined ? "disabled" : ""} class="${picked === undefined ? "" : i === q.a ? "ok" : i === picked ? "no" : ""}"><span class="l">${L[i]}</span><span>${o}</span></button>`).join("")}</div>
+      ${picked !== undefined ? `<div class="why"><b>${picked === q.a ? "Correct." : "Answer: " + L[q.a] + "."}</b> ${q.why}</div>` : ""}
+      <div class="q-nav">${picked !== undefined ? `<button class="btn primary" id="q-next">${pos + 1 === total ? "See score" : "Next question"}</button>` : ""}</div>`;
+    $("quiz").querySelectorAll(".opts button").forEach((b) => (b.onclick = () => { answers[idx] = +b.dataset.i; renderQ(pos, total); }));
+    const n = $("q-next");
+    if (n) { n.focus(); n.onclick = () => { qi = pos + 1; if (qi >= total) finish(); else renderQ(qi, total); }; }
+  }
+  function finish() {
+    if (order.length === Q.length) { quiz(); return; }
+    const right = order.filter((i) => answers[i] === Q[i].a).length;
+    $("quiz").innerHTML = `<div class="score-big">${right} / ${order.length}</div><p>Retry round done.</p><div class="q-nav"><button class="btn primary" id="q-restart">Full quiz again</button></div>`;
+    $("q-restart").onclick = () => { qi = 0; answers = []; order = Q.map((_, i) => i); quiz(); };
+  }
+  function retry() { renderQ(0, order.length); }
+  quiz();
+
+  selectTopic(ti);
+  route();
+})();
+</script>

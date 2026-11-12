@@ -9,17 +9,38 @@
 <body>
 <div id="stage"></div>
 <script type="module">
-import data from "/content/ch01.mjs";
-import { buildTopics, renderSlide, fit, stepCount, captionFor } from "/templates/slides.js";
+import { buildTopics, renderSlide, fit, stepCount, captionFor, speakable } from "/templates/slides.js";
+const CH = new URLSearchParams(location.search).get("ch") || "ch01";
+const data = (await import(`/content/${CH}.mjs`)).default;
 const topics = buildTopics(data);
 const stage = document.getElementById("stage");
 
 function opts(ti, si, orient, step) {
   const t = topics[ti];
-  return { orient, step, topic: t, index: si, total: t.slides.length, chapter: data.chapter };
+  return { orient, step, topic: t, index: si, total: t.slides.length, chapter: data.chapter, specimen: data.specimen };
 }
 
 window.R = {
+  // Every video step's caption and speech text (voice mode).
+  narration: () => topics.map((t, ti) => t.slides.map((s, si) => Array.from({ length: stepCount(s) }, (_, step) => {
+    const text = captionFor(s, step, true);
+    return { id: `${t.id}/${String(si).padStart(2, "0")}-${step}`, ti, si, step, text, speak: speakable(text), anim: !!s.anim };
+  }))),
+  // Voice-mode frame: p = bullet slide-in progress, at = animation tween progress, cap = caption chunk.
+  vframe(ti, si, step, p, at, cap, progress, fs) {
+    const s = topics[ti].slides[si];
+    stage.innerHTML = `<div class="vframe">${renderSlide(s, { ...opts(ti, si, "landscape", step), animT: at })}<div class="vbar-bg"></div><div class="vbar" style="width:${(progress * 100).toFixed(2)}%"></div><div class="vcap">${cap}</div></div>`;
+    const sl = stage.querySelector(".sl");
+    sl.style.setProperty("--fs", fs + "px");
+    const e = 1 - Math.pow(1 - p, 3);
+    if (step === 0 && si === 0) { sl.style.opacity = String(0.1 + 0.9 * e); }
+    else if (step === 0) { const b = sl.querySelector(".sl-body"); if (b) b.style.opacity = String(0.2 + 0.8 * e); }
+    else {
+      const cur = sl.querySelector(".step-current") || sl.querySelector(".mcq-why");
+      if (cur) { cur.style.opacity = String(e); cur.style.transform = `translateX(${(1 - e) * -36}px)`; }
+    }
+    return true;
+  },
   manifest: () => topics.map((t) => ({ id: t.id, short: t.short, slides: t.slides.map((s) => ({ kind: s.kind, steps: stepCount(s) })) })),
   // Carousel slide: all content visible.
   carousel(ti, si, step = null) {

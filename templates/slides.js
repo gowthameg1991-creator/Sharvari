@@ -1,5 +1,6 @@
 // Shared slide renderer for carousels (portrait), video frames (landscape) and the site.
-// Pure DOM-string building + a fit() helper; no dependencies.
+// Pure DOM-string building + a fit() helper. Animated diagrams come from cellanim.js.
+import { drawScene } from "./cellanim.js";
 
 const LETTERS = ["A", "B", "C", "D"];
 const esc = (s) => String(s);
@@ -7,17 +8,19 @@ const esc = (s) => String(s);
 /** Adds the generated MCQ topic and numbers slides. */
 export function buildTopics(data) {
   const topics = data.topics.map((t) => ({ ...t, slides: [...t.slides] }));
+  const n = data.mcq.length;
+  const chapNo = (data.chapter.match(/Chapter (\d+)/) || [, ""])[1];
   topics.push({
-    id: "08-neet-practice",
+    id: String(topics.length + 1).padStart(2, "0") + "-neet-practice",
     short: "NEET practice MCQs",
-    title: "NEET practice: 20 MCQs",
+    title: `NEET practice: ${n} MCQs`,
     slides: [
       {
         kind: "cover",
         eyebrow: "Practice · Beyond NCERT format",
-        title: "20 NEET-style MCQs",
-        sub: "Every fact comes from Chapter 1. Pause on each question, answer, then check.",
-        say: ["Twenty practice questions. Pause on each one, answer it, then let the answer appear."],
+        title: `${n} NEET-style MCQs`,
+        sub: `Every fact comes from Chapter ${chapNo}. Pause on each question, answer, then check.`,
+        say: [`${n} practice questions. Pause on each one, answer it, then let the answer appear.`],
       },
       ...data.mcq.map((m, i) => ({ kind: "mcq", extra: true, n: i + 1, ...m })),
     ],
@@ -33,16 +36,45 @@ export function stepCount(s) {
   return Math.max(1, s.points.length);
 }
 
-/** Caption text for a step (video). */
-export function captionFor(s, step) {
-  if (s.kind === "mcq") return step === 0 ? "Pause the video and choose your answer." : "Answer: " + LETTERS[s.a] + ". " + s.why;
-  if (s.kind === "qa") return step === 0 ? "Think of your answer first. The model answer follows." : "";
-  return (s.say && s.say[step]) || "";
+const plain = (h) => String(h).replace(/<sub>(.*?)<\/sub>/g, "$1").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+
+/** Caption text for a step (video). With voice=true, every step gets spoken text. */
+export function captionFor(s, step, voice = false) {
+  if (s.say && s.say[step]) return s.say[step];
+  if (s.kind === "mcq") {
+    if (!voice) return step === 0 ? "Pause the video and choose your answer." : "Answer: " + LETTERS[s.a] + ". " + s.why;
+    return step === 0
+      ? `Question ${s.n}. ${plain(s.q)}. ` + s.o.map((o, i) => `${LETTERS[i]}: ${plain(o)}.`).join(" ") + " Pause the video and choose your answer."
+      : `The answer is ${LETTERS[s.a]}, ${plain(s.o[s.a])}. ${plain(s.why)}`;
+  }
+  if (s.kind === "qa") {
+    if (!voice) return step === 0 ? "Think of your answer first. The model answer follows." : "";
+    return step === 0 ? plain(s.q) + " Think of your answer first." : plain(s.a[step - 1]);
+  }
+  if (voice && s.kind === "points" && s.points[step]) return plain(s.points[step]);
+  return "";
 }
 
-function renderDiagram(d) {
+/** Text for the speech engine: expands symbols the voice would misread. */
+export function speakable(text) {
+  return plain(text)
+    .replace(/\bG([0-2])\b/g, (_, d) => "G " + ["zero", "one", "two"][d])
+    .replace(/\b([248])C\b/g, (_, d) => ({ 2: "two", 4: "four", 8: "eight" })[d] + " C")
+    .replace(/\b(\d)n\b/g, (_, d) => ({ 2: "two", 3: "three", 4: "four" })[d] + " n")
+    .replace(/(\d)\s*%/g, "$1 percent")
+    .replace(/→/g, " to ").replace(/~/g, "about ").replace(/\bEx (\d+)\./g, "Exercise $1.")
+    .replace(/\bvs\b/g, "versus").replace(/\be\.g\./g, "for example").replace(/\bi\.e\./g, "that is")
+    .replace(/[·•]/g, ",").replace(/\s+/g, " ").trim();
+}
+
+function renderDiagram(d, a) {
   if (!d) return "";
   switch (d.type) {
+    case "anim":
+      return `<div class="dia-anim">${drawScene(d.scene, a.from, a.to, a.t)}</div>`;
+    case "nctable":
+      return `<table class="dia-table nct"><thead><tr><th>Stage</th><th>Chromosomes (N)</th><th>DNA (C)</th></tr></thead><tbody>${d.rows
+        .map(([st, n, c]) => `<tr><th>${st}</th><td>${n}</td><td>${c}</td></tr>`).join("")}</tbody></table>`;
     case "compare":
       return `<div class="dia-compare">${[d.left, d.right]
         .map((c) => `<div><h4>${c.h}</h4>${c.items.map((x) => `<p>${x}</p>`).join("")}</div>`)
@@ -114,7 +146,7 @@ function renderDiagram(d) {
  *         topic, index, total, chapter }
  */
 export function renderSlide(s, opts) {
-  const { orient = "portrait", step = null, topic, index = 0, total = 1, chapter = "" } = opts;
+  const { orient = "portrait", step = null, topic, index = 0, total = 1, chapter = "", specimen = "TAXON <i>Homo sapiens</i> · Ch 1", animT = 1 } = opts;
   const all = step === null;
   const cls = `sl ${orient} kind-${s.kind}${s.extra ? " is-extra" : ""}`;
   const tag = s.extra ? "NEET tip · Beyond NCERT" : topic.short;
@@ -122,7 +154,7 @@ export function renderSlide(s, opts) {
   const foot = `<div class="sl-foot"><span>${chapter}</span><span>NCERT Biology XI</span></div>`;
 
   if (s.kind === "cover") {
-    return `<section class="${cls}">${top}<div class="cv-main"><div class="cv-eyebrow">${s.eyebrow}</div><h1 class="cv-title">${s.title}</h1><p class="cv-sub">${s.sub}</p><div class="cv-specimen">TAXON <i>Homo sapiens</i> · Ch 1</div></div>${foot}</section>`;
+    return `<section class="${cls}">${top}<div class="cv-main"><div class="cv-eyebrow">${s.eyebrow}</div><h1 class="cv-title">${s.title}</h1><p class="cv-sub">${s.sub}</p><div class="cv-specimen">${specimen}</div></div>${foot}</section>`;
   }
 
   const vis = (i) => {
@@ -143,7 +175,15 @@ export function renderSlide(s, opts) {
   }
 
   const pts = s.points.map((p, i) => `<li data-i="${i}" class="${vis(i)}">${p}</li>`).join("");
-  const dia = s.diagram ? `<div class="sl-dia">${renderDiagram(s.diagram)}</div>` : "";
+  // Animated slides: step i shows anim.states[i]; carousels (step null) show the last state.
+  let anim = null, diagram = s.diagram;
+  if (s.anim) {
+    const st = s.anim.states;
+    const i = step === null ? (s.anim.still ? st.indexOf(s.anim.still) : st.length - 1) : Math.min(step, st.length - 1);
+    anim = { from: st[Math.max(0, animT < 1 ? i - 1 : i)], to: st[i], t: animT };
+    diagram = { type: "anim", scene: s.anim.scene };
+  }
+  const dia = diagram ? `<div class="sl-dia">${renderDiagram(diagram, anim)}</div>` : "";
   const bodyCls = `sl-body${dia ? " has-diagram" : ""}${s.points.length ? "" : " no-points"}`;
   const list = s.points.length ? `<ul class="sl-points${s.numbered ? " numbered" : ""}">${pts}</ul>` : "";
   // Portrait: diagram above points. Landscape: points left, diagram right (CSS order).

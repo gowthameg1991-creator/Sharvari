@@ -31,7 +31,7 @@
     $("vid-name").textContent = t.id + ".mp4";
     $("video-box").innerHTML = `<video controls preload="metadata" playsinline src="videos/${t.id}.mp4"></video>`;
     $("video-box").querySelector("video").addEventListener("error", () => {
-      $("video-box").innerHTML = `<div class="video-missing">This video isn't loaded here. Open <b>${t.id}.mp4</b> from the videos folder.</div>`;
+      $("video-box").innerHTML = `<div class="video-missing"><p>This video isn't loaded here. Open <b>${t.id}.mp4</b> from the videos folder.</p></div>`;
     });
     $("notes").innerHTML = `<div class="panel-label"><span>In this topic</span><span>${t.slides.length} slides</span></div><ul>${t.slides
       .map((s, k) => `<li><a href="#learn" data-k="${k}">${strip(s.title || s.q || "")}</a>${s.extra ? ' <span class="badge-extra">NEET tip</span>' : ""}</li>`).join("")}</ul>`;
@@ -49,12 +49,36 @@
     current.style.transform = "none";
     fit(current, 54, 18);
     layoutSlide();
+    stopAnim();
+    $("anim-ctl").hidden = !s.anim;
+    $("anim-stage").textContent = s.anim ? `${s.anim.states.length} stages` : "";
     $("count").textContent = `${si + 1} / ${t.slides.length}`;
     $("prev").disabled = si === 0;
     $("next").disabled = si === t.slides.length - 1;
     $("slide-kind").textContent = s.extra ? "NEET tip · beyond NCERT" : s.kind === "qa" ? "NCERT exercise" : "";
     document.querySelectorAll("#dots button").forEach((b) => b.setAttribute("aria-current", String(+b.dataset.k === si)));
   }
+  let raf = 0;
+  function stopAnim() { cancelAnimationFrame(raf); raf = 0; $("anim-play").textContent = "▶ Play animation"; }
+  $("anim-play").onclick = () => {
+    if (raf) return stopAnim();
+    const s = topics[ti].slides[si], box = current.querySelector(".dia-anim");
+    if (!s.anim || !box) return;
+    const states = s.anim.states.filter((x, i, a) => i === 0 || x !== a[i - 1]);
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const SEG = reduce ? 1 : 1600, HOLD = 1100;
+    let t0 = performance.now();
+    $("anim-play").textContent = "■ Stop";
+    const tick = (now) => {
+      const el = now - t0, seg = Math.floor(el / (SEG + HOLD)), k = Math.min(seg + 1, states.length - 1);
+      const p = Math.min(1, (el - seg * (SEG + HOLD)) / SEG);
+      box.innerHTML = drawScene(s.anim.scene, states[Math.max(0, k - 1)], states[k], states.length === 1 ? 1 : p);
+      $("anim-stage").textContent = `Stage ${k + 1} of ${states.length}`;
+      if (seg >= states.length - 1) return stopAnim();
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+  };
   function layoutSlide() {
     if (!current) return;
     const w = $("frame").clientWidth;
@@ -87,6 +111,49 @@
   $("gl-none").onclick = () => document.querySelectorAll(".card").forEach((c) => c.setAttribute("aria-pressed", "false"));
   renderCards();
 
+  /* ---------- stage lab (chapters with drills) ---------- */
+  function stageLab() {
+    const lab = document.querySelector("#v-lab .lab");
+    lab.previousElementSibling.textContent = "Put stages in order, and track chromosome number (N) and DNA content (C).";
+    lab.innerHTML = `<div class="box"><h3 style="margin:0;font-family:var(--f-display)">Put the stages in order</h3>
+      <div class="drill-pick seg" id="drill-pick" role="group" aria-label="Drill"></div>
+      <p class="muted" style="margin:8px 0 0">Tap the stages in the order they happen.</p>
+      <div class="built" id="built" aria-live="polite"></div><div class="pool" id="pool"></div>
+      <div class="status" id="lad-status"></div><button class="btn" id="lad-reset" style="margin-top:8px">Shuffle again</button></div>
+      <div class="box"><h3 style="margin:0;font-family:var(--f-display)">N and C tracker</h3>
+      <p class="muted" style="margin:4px 0 0">For a diploid cell (2n, 2C at G<sub>1</sub>), pick N and C at each stage.</p>
+      <div class="nc-grid" id="nc"></div>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap"><button class="btn primary" id="nc-check">Check</button><button class="btn" id="nc-show">Show answers</button></div>
+      <div class="status" id="nc-status"></div></div>`;
+    let d = 0, built = [], pool = [];
+    const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+    $("drill-pick").innerHTML = DATA.drills.map((x, i) => `<button aria-pressed="${i === 0}" data-i="${i}">${x.name}</button>`).join("");
+    $("drill-pick").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; d = +b.dataset.i; $("drill-pick").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); reset(); });
+    const reset = () => { built = []; pool = shuffle(DATA.drills[d].order); draw(); };
+    function draw() {
+      const order = DATA.drills[d].order;
+      $("pool").innerHTML = pool.filter((x) => !built.includes(x)).map((x) => `<button>${x}</button>`).join("");
+      $("built").innerHTML = built.map((x, i) => `<span class="${x === order[i] ? "" : "wrong"}">${x}</span>`).join("");
+      const bad = built.findIndex((x, i) => x !== order[i]);
+      $("lad-status").className = "status " + (bad >= 0 ? "no" : built.length === order.length ? "ok" : "");
+      $("lad-status").textContent = bad >= 0 ? `Not quite. ${bad ? "After " + order[bad - 1] + " comes" : "It starts with"} ${order[bad]}.` : built.length === order.length ? "Correct order!" : "";
+      if (bad >= 0) $("pool").querySelectorAll("button").forEach((b) => (b.disabled = true));
+    }
+    $("pool").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) { built.push(b.textContent); draw(); } });
+    $("lad-reset").onclick = reset;
+    reset();
+    const NS = ["n", "2n", "4n"], CS = ["C", "2C", "4C"];
+    $("nc").innerHTML = `<span class="h">Stage</span><span class="h">N</span><span class="h">C</span>` + DATA.ncQuiz.map(([st], i) =>
+      `<label for="ncn-${i}">${st}</label><select id="ncn-${i}" aria-label="${st} N"><option value="">–</option>${NS.map((x) => `<option>${x}</option>`).join("")}</select><select id="ncc-${i}" aria-label="${st} C"><option value="">–</option>${CS.map((x) => `<option>${x}</option>`).join("")}</select>`).join("");
+    $("nc-check").onclick = () => {
+      let ok = 0, tot = 0;
+      DATA.ncQuiz.forEach(([, n, c], i) => [["ncn-", n], ["ncc-", c]].forEach(([p, v]) => { const s = $(p + i); tot++; const g = s.value === v; ok += g; s.className = s.value ? (g ? "ok" : "no") : ""; }));
+      $("nc-status").className = "status " + (ok === tot ? "ok" : "no");
+      $("nc-status").textContent = ok === tot ? "All correct." : `${ok} of ${tot} correct.`;
+    };
+    $("nc-show").onclick = () => DATA.ncQuiz.forEach(([, n, c], i) => { $("ncn-" + i).value = n; $("ncc-" + i).value = c; $("ncn-" + i).className = $("ncc-" + i).className = "ok"; });
+  }
+  if (DATA.drills) stageLab(); else {
   /* ---------- hierarchy lab ---------- */
   const ORDER = ["Species", "Genus", "Family", "Order", "Class", "Phylum / Division", "Kingdom"];
   let built = [];
@@ -133,6 +200,7 @@
   $("tbl-show").onclick = () => { ROWS.forEach((_, i) => { const s = $("t11-" + i); s.value = T11[org][i]; s.className = "ok"; }); $("tbl-status").className = "status"; $("tbl-status").textContent = ""; };
   table();
 
+  }
   /* ---------- quiz ---------- */
   const Q = DATA.mcq, L = ["A", "B", "C", "D"];
   let qi = 0, answers = [];
