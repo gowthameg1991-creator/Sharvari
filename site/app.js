@@ -237,10 +237,26 @@
   function finish() {
     if (order.length === Q.length) { quiz(); return; }
     const right = order.filter((i) => answers[i] === Q[i].a).length;
-    $("quiz").innerHTML = `<div class="score-big">${right} / ${order.length}</div><p>Retry round done.</p><div class="q-nav"><button class="btn primary" id="q-restart">Full quiz again</button></div>`;
+    $("quiz").innerHTML = `<div class="score-big">${right} / ${order.length}</div><p>Round done. ${order.length - right ? "Review the explanations, then try again." : "All correct!"}</p><div class="q-nav"><button class="btn primary" id="q-restart">Full quiz again</button></div>`;
     $("q-restart").onclick = () => { qi = 0; answers = []; order = Q.map((_, i) => i); quiz(); };
   }
   function retry() { renderQ(0, order.length); }
+  // Long question banks: pick a set of about 20, or take all.
+  if (Q.length > 25) {
+    const sets = Math.round(Q.length / 20), per = Math.ceil(Q.length / sets);
+    const bar = document.createElement("div");
+    bar.className = "seg"; bar.setAttribute("role", "group"); bar.setAttribute("aria-label", "Question set"); bar.style.margin = "0 0 14px";
+    const opts = [["All " + Q.length, 0, Q.length]].concat(Array.from({ length: sets }, (_, k) => [`Q${k * per + 1}–${Math.min(Q.length, (k + 1) * per)}`, k * per, Math.min(Q.length, (k + 1) * per)]));
+    bar.innerHTML = opts.map(([l, a, z], i) => `<button aria-pressed="${i === 0}" data-a="${a}" data-z="${z}">${l}</button>`).join("");
+    $("quiz").before(bar);
+    bar.addEventListener("click", (e) => {
+      const b = e.target.closest("button"); if (!b) return;
+      bar.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      qi = 0; answers = [];
+      order = Array.from({ length: +b.dataset.z - +b.dataset.a }, (_, i) => +b.dataset.a + i);
+      if (order.length === Q.length) quiz(); else renderQ(0, order.length);
+    });
+  }
   quiz();
 
   selectTopic(ti);

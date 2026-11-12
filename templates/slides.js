@@ -10,21 +10,27 @@ export function buildTopics(data) {
   const topics = data.topics.map((t) => ({ ...t, slides: [...t.slides] }));
   const n = data.mcq.length;
   const chapNo = (data.chapter.match(/Chapter (\d+)/) || [, ""])[1];
-  topics.push({
-    id: String(topics.length + 1).padStart(2, "0") + "-neet-practice",
-    short: "NEET practice MCQs",
-    title: `NEET practice: ${n} MCQs`,
-    slides: [
-      {
-        kind: "cover",
-        eyebrow: "Practice · Beyond NCERT format",
-        title: `${n} NEET-style MCQs`,
-        sub: `Every fact comes from Chapter ${chapNo}. Pause on each question, answer, then check.`,
-        say: [`${n} practice questions. Pause on each one, answer it, then let the answer appear.`],
-      },
-      ...data.mcq.map((m, i) => ({ kind: "mcq", extra: true, n: i + 1, ...m })),
-    ],
-  });
+  // Practice comes in sets of about 20 so each video stays short.
+  const sets = Math.max(1, Math.round(n / 20)), per = Math.ceil(n / sets);
+  for (let k = 0; k < sets; k++) {
+    const part = data.mcq.slice(k * per, (k + 1) * per), from = k * per + 1, to = k * per + part.length;
+    const label = sets > 1 ? ` · set ${k + 1} of ${sets}` : "";
+    topics.push({
+      id: String(topics.length + 1).padStart(2, "0") + "-neet-practice" + (sets > 1 ? `-${k + 1}` : ""),
+      short: "NEET practice MCQs" + (sets > 1 ? ` ${from}–${to}` : ""),
+      title: `NEET practice: ${part.length} MCQs${label}`,
+      slides: [
+        {
+          kind: "cover",
+          eyebrow: "Practice · Beyond NCERT format" + label,
+          title: sets > 1 ? `NEET MCQs ${from}–${to}` : `${n} NEET-style MCQs`,
+          sub: `Every fact comes from Chapter ${chapNo}. Pause on each question, answer, then check.`,
+          say: [sets > 1 ? `Practice set ${k + 1} of ${sets}: questions ${from} to ${to}. Pause on each one, answer it, then let the answer appear.` : `${n} practice questions. Pause on each one, answer it, then let the answer appear.`],
+        },
+        ...part.map((m, i) => ({ kind: "mcq", extra: true, n: from + i, ...m })),
+      ],
+    });
+  }
   return topics;
 }
 
