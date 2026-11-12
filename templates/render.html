@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/templates/slides.css">
+<style>html,body{margin:0;background:#0E1E18}#stage{display:inline-block}</style>
+</head>
+<body>
+<div id="stage"></div>
+<script type="module">
+import data from "/content/ch01.mjs";
+import { buildTopics, renderSlide, fit, stepCount, captionFor } from "/templates/slides.js";
+const topics = buildTopics(data);
+const stage = document.getElementById("stage");
+
+function opts(ti, si, orient, step) {
+  const t = topics[ti];
+  return { orient, step, topic: t, index: si, total: t.slides.length, chapter: data.chapter };
+}
+
+window.R = {
+  manifest: () => topics.map((t) => ({ id: t.id, short: t.short, slides: t.slides.map((s) => ({ kind: s.kind, steps: stepCount(s) })) })),
+  // Carousel slide: all content visible.
+  carousel(ti, si, step = null) {
+    stage.innerHTML = renderSlide(topics[ti].slides[si], opts(ti, si, "portrait", step));
+    return fit(stage.firstElementChild, 54, 18);
+  },
+  // Fit a landscape slide with everything visible; returns font size to reuse for each step.
+  fitLandscape(ti, si) {
+    stage.innerHTML = `<div class="vframe">${renderSlide(topics[ti].slides[si], opts(ti, si, "landscape", null))}</div>`;
+    return fit(stage.querySelector(".sl"), 46, 18);
+  },
+  // Video frame for one step at transition progress p (0..1). Returns the caption + reading text length.
+  frame(ti, si, step, p, fs, progress) {
+    const s = topics[ti].slides[si];
+    const cap = captionFor(s, step);
+    stage.innerHTML = `<div class="vframe">${renderSlide(s, opts(ti, si, "landscape", step))}<div class="vbar-bg"></div><div class="vbar" style="width:${(progress * 100).toFixed(2)}%"></div><div class="vcap">${cap}</div></div>`;
+    const sl = stage.querySelector(".sl");
+    sl.style.setProperty("--fs", fs + "px");
+    const e = 1 - Math.pow(1 - p, 3);
+    let newText = "";
+    if (step === 0) {
+      sl.style.opacity = String(0.15 + 0.85 * e);
+      sl.style.transform = `translateY(${(1 - e) * 24}px)`;
+      newText = sl.innerText;
+    } else {
+      const cur = sl.querySelector(".step-current") || sl.querySelector(".mcq-why");
+      if (cur) {
+        cur.style.opacity = String(e);
+        cur.style.transform = `translateX(${(1 - e) * -36}px)`;
+        newText = cur.innerText;
+      }
+    }
+    const capEl = stage.querySelector(".vcap");
+    capEl.style.opacity = String(e);
+    if (step === 0 && s.kind !== "cover") newText = (sl.querySelector(".sl-points li, .mcq-opts, .qa-q") || {}).innerText || "";
+    if (step === 0 && s.kind === "cover") newText = s.title + " " + s.sub;
+    if (step === 0 && s.kind === "points" && !s.points.length) newText = sl.querySelector(".sl-dia").innerText;
+    else if (step === 0 && sl.querySelector(".sl-dia")) newText += " ".repeat(Math.round(sl.querySelector(".sl-dia").innerText.length * 0.5));
+    if (step === 0 && s.kind === "mcq") newText = sl.querySelector(".sl-body").innerText;
+    return { cap, chars: cap.length + newText.length, kind: s.kind, step };
+  },
+};
+window.READY = document.fonts.ready.then(() => true);
+</script>
+</body>
+</html>
