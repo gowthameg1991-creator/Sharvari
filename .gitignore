@@ -6,3 +6,4 @@ models/
 out/ch10/.voice/
 out/ch10/.frames/
 out/ch10/render.log
+out/ch10/render*.log
