@@ -37,7 +37,7 @@ export default {
         {
           kind: "points",
           title: "One cell to millions",
-          anim: { scene: "cell", states: ["interphase", "interphase", "cyto-animal", "cyto-animal", "syncytium4"], still: "cyto-animal" },
+          anim: { scene: "cell", states: ["interphase", "interphase", "cyto-animal-mid", "cyto-animal", "cyto-animal"], still: "cyto-animal" },
           points: [
             "All organisms, even the largest, start their life from a <b>single cell</b>.",
             "<b>Growth and reproduction</b> are characteristics of cells, indeed of all living organisms.",
@@ -537,7 +537,7 @@ export default {
         {
           kind: "points",
           title: "Leptotene & zygotene",
-          anim: { scene: "cell", states: ["leptotene", "leptotene", "zygotene", "zygotene", "zygotene"] },
+          anim: { scene: "cell", states: ["leptotene", "zygotene", "zygotene", "zygotene", "zygotene"] },
           points: [
             "<b>Leptotene</b>: chromosomes become <b>gradually visible</b> under the light microscope; <b>compaction continues</b> throughout leptotene.",
             "<b>Zygotene</b>: chromosomes start <b>pairing</b>. This association is <b>synapsis</b>; the paired chromosomes are <b>homologous chromosomes</b>.",
